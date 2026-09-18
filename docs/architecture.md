@@ -9,7 +9,7 @@
 
 ## 1. Ringkasan Eksekutif
 
-**TitipJalur** adalah *Peer-to-Peer Micro-Errand & Commuter Delivery Platform*: marketplace dua sisi yang menghubungkan kebutuhan titip barang/makanan **hyperlocal** (< 1–2 km) dengan rute harian mahasiswa dan komuter. TitipJalur adalah **perantara murni tanpa inventory** — tidak memiliki armada, tidak menahan barang, tidak menetapkan harga layanan; ia hanya mempertemukan dua peran:
+**TitipJalur** adalah *Peer-to-Peer Micro-Errand & Commuter Delivery Platform*: marketplace dua sisi yang menghubungkan kebutuhan titip barang/makanan **hyperlocal** (< 1–2 km) dengan rute harian mahasiswa dan komuter. TitipJalur adalah **perantara murni tanpa inventory**  tidak memiliki armada, tidak menahan barang, tidak menetapkan harga layanan; ia hanya mempertemukan dua peran:
 
 | Peran | Definisi | Nilai yang diperoleh |
 | :--- | :--- | :--- |
@@ -22,9 +22,7 @@ Filosofi arsitektur: **offline-first + graceful degradation** di perangkat, **cl
 
 ---
 
-## 2. Keputusan Tech Stack
-
-Setiap keputusan dirancang untuk satu target: **APK release yang deterministik, gratis, dan tahan demo UTS/UAS**.
+## 2. Tech Stack
 
 ### 2.1 Matriks Keputusan
 
