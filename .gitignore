@@ -1,0 +1,33 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/debug/
+android/key.properties
+
+# Firebase credentials (WAJIB — jangan pernah commit)
+google-services.json
+android/app/google-services.json
+firebase_app_check_config.json
+
+# Secrets / lokal
+*.keystore
+*.jks
+.env
+.env.*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
