@@ -4,6 +4,7 @@ import '../screens/dashboard_screen.dart';
 import '../screens/detail_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/profile_screen.dart';
+import '../screens/create_errand_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String dashboard = '/dashboard';
   static const String detail = '/detail';
   static const String profile = '/profile';
+  static const String createErrand = '/create-errand';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -41,6 +43,11 @@ class AppRoutes {
       case profile:
         return MaterialPageRoute(
           builder: (_) => const ProfileScreen(),
+          settings: settings,
+        );
+      case createErrand:
+        return MaterialPageRoute(
+          builder: (_) => const CreateErrandScreen(),
           settings: settings,
         );
       default:

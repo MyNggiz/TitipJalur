@@ -21,6 +21,7 @@ class AppTextField extends StatelessWidget {
   final bool autofocus;
   final double borderRadius;
   final Color? fillColor;
+  final String? errorText;
 
   const AppTextField({
     super.key,
@@ -44,6 +45,7 @@ class AppTextField extends StatelessWidget {
     this.autofocus = false,
     this.borderRadius = 12.0,
     this.fillColor,
+    this.errorText,
   });
 
   Widget? _resolveIcon(dynamic icon, BuildContext context) {
@@ -94,6 +96,7 @@ class AppTextField extends StatelessWidget {
           color: Color(0xFF94A3B8),
           fontWeight: FontWeight.w400,
         ),
+        errorText: errorText,
         prefixIcon: _resolveIcon(prefixIcon, context),
         suffixIcon: _resolveIcon(suffixIcon, context),
         filled: true,
