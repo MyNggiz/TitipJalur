@@ -229,6 +229,7 @@ class ErrandCard extends StatelessWidget {
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           textStyle: const TextStyle(
+                            fontFamily: 'Roboto',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -247,6 +248,7 @@ class ErrandCard extends StatelessWidget {
                           foregroundColor: const Color(0xFF059669),
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           textStyle: const TextStyle(
+                            fontFamily: 'Roboto',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),

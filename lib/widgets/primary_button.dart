@@ -58,6 +58,7 @@ class PrimaryButton extends StatelessWidget {
                   maxLines: 1,
                   style: textStyle ??
                       const TextStyle(
+                        fontFamily: 'Roboto',
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),

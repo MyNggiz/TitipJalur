@@ -554,7 +554,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         icon: const Icon(Icons.add_rounded),
         label: const Text(
           '+ Titip Cepat',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
