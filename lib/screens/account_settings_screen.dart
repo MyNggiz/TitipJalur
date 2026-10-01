@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../widgets/fade_slide_entry.dart';
+import '../widgets/responsive_container.dart';
 import '../widgets/primary_button.dart';
 class AccountSettingsScreen extends ConsumerStatefulWidget {
   const AccountSettingsScreen({super.key});
@@ -231,37 +232,39 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(18, 16, 18, 130),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // 1. Profil Mahasiswa
-            FadeSlideEntry.staggered(
-              index: 0,
-              child: Container(
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF0F172A).withValues(alpha: 0.04),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
+        child: ResponsiveContainer(
+          maxWidth: 650,
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 1. Profil Mahasiswa
+              FadeSlideEntry.staggered(
+                index: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
                   children: [
                     CircleAvatar(
-                      radius: 32,
+                      radius: 24,
                       backgroundColor: const Color(0xFF059669),
                       child: Text(
                         userInitial,
                         style: const TextStyle(
                           fontFamily: 'Roboto',
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: Colors.white,
                         ),
@@ -276,17 +279,17 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                             userName,
                             style: const TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 17,
+                              fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF0F172A),
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2),
                           Text(
                             userEmail,
                             style: const TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 13,
+                              fontSize: 11.5,
                               color: Color(0xFF64748B),
                             ),
                           ),
@@ -320,7 +323,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             FadeSlideEntry.staggered(
               index: 1,
               child: Container(
-                padding: const EdgeInsets.all(22),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF065F46), Color(0xFF059669)],
@@ -380,7 +383,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     'Rp ${_walletBalance.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}',
                     style: const TextStyle(
                       fontFamily: 'Roboto',
-                      fontSize: 28,
+                      fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),
@@ -388,51 +391,59 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                   const SizedBox(height: 18),
                   Row(
                     children: [
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF065F46),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        height: 36,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFF065F46),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        ),
-                        onPressed: _showWithdrawDialog,
-                        icon: const Icon(Icons.arrow_upward_rounded, size: 16),
-                        label: const Text(
-                          'Tarik Saldo',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                          onPressed: _showWithdrawDialog,
+                          icon: const Icon(Icons.arrow_upward_rounded, size: 15),
+                          label: const Text(
+                            'Tarik Saldo',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white70),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Riwayat tip: 14 titipan berhasil diselesaikan.'),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        height: 36,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Colors.white70),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          );
-                        },
-                        icon: const Icon(Icons.history_rounded, size: 16),
-                        label: const Text(
-                          'Riwayat',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                          ),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Riwayat tip: 14 titipan berhasil diselesaikan.'),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.history_rounded, size: 15),
+                          label: const Text(
+                            'Riwayat',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
@@ -470,21 +481,23 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     child: Column(
                       children: [
                         ListTile(
-                          leading: const Icon(Icons.radar_rounded, color: Color(0xFF059669)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                          visualDensity: VisualDensity.compact,
+                          leading: const Icon(Icons.radar_rounded, color: Color(0xFF059669), size: 22),
                           title: const Text(
                             'Radius Komuter Default',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 14,
+                              fontSize: 12.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
                             '${_commuterRadius.toStringAsFixed(1)} km dari posisi rute',
-                            style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
+                            style: const TextStyle(fontFamily: 'Roboto', fontSize: 11),
                           ),
                           trailing: SizedBox(
-                            width: 120,
+                            width: 110,
                             child: Slider(
                               value: _commuterRadius,
                               min: 0.5,
@@ -495,59 +508,65 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                             ),
                           ),
                         ),
-                        const Divider(height: 1, indent: 16, endIndent: 16),
+                        const Divider(height: 1, indent: 14, endIndent: 14),
                         SwitchListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                          visualDensity: VisualDensity.compact,
                           activeColor: const Color(0xFF059669),
-                          secondary: const Icon(Icons.wifi_off_rounded, color: Color(0xFF059669)),
+                          secondary: const Icon(Icons.wifi_off_rounded, color: Color(0xFF059669), size: 22),
                           title: const Text(
                             'Mode Offline-First (Hemat Sinyal)',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 14,
+                              fontSize: 12.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: const Text(
                             'Otomatis simpan antrean ke basis data lokal saat koneksi kampus terputus',
-                            style: TextStyle(fontFamily: 'Roboto', fontSize: 12),
+                            style: TextStyle(fontFamily: 'Roboto', fontSize: 11),
                           ),
                           value: _offlineFirstMode,
                           onChanged: (val) => setState(() => _offlineFirstMode = val),
                         ),
-                        const Divider(height: 1, indent: 16, endIndent: 16),
+                        const Divider(height: 1, indent: 14, endIndent: 14),
                         SwitchListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                          visualDensity: VisualDensity.compact,
                           activeColor: const Color(0xFF059669),
-                          secondary: const Icon(Icons.notifications_active_outlined, color: Color(0xFF059669)),
+                          secondary: const Icon(Icons.notifications_active_outlined, color: Color(0xFF059669), size: 22),
                           title: const Text(
                             'Notifikasi Titipan Searah',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 14,
+                              fontSize: 12.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: const Text(
                             'Kirim alarm lokal saat ada pesanan baru di kantin/titik yang Anda lewati',
-                            style: TextStyle(fontFamily: 'Roboto', fontSize: 12),
+                            style: TextStyle(fontFamily: 'Roboto', fontSize: 11),
                           ),
                           value: _nearbyNotifications,
                           onChanged: (val) => setState(() => _nearbyNotifications = val),
                         ),
-                        const Divider(height: 1, indent: 16, endIndent: 16),
+                        const Divider(height: 1, indent: 14, endIndent: 14),
                         SwitchListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                          visualDensity: VisualDensity.compact,
                           activeColor: const Color(0xFF059669),
-                          secondary: const Icon(Icons.two_wheeler_rounded, color: Color(0xFF059669)),
+                          secondary: const Icon(Icons.two_wheeler_rounded, color: Color(0xFF059669), size: 22),
                           title: const Text(
                             'Status Runner Otomatis',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 14,
+                              fontSize: 12.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: const Text(
                             'Tampilkan status aktif di rute perjalanan menuju kelas/gedung',
-                            style: TextStyle(fontFamily: 'Roboto', fontSize: 12),
+                            style: TextStyle(fontFamily: 'Roboto', fontSize: 11),
                           ),
                           value: _autoRunnerMode,
                           onChanged: (val) => setState(() => _autoRunnerMode = val),
@@ -639,12 +658,14 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               icon: Icons.logout_rounded,
               color: const Color(0xFFEF4444),
               isOutlined: true,
+              height: 42,
               onPressed: _handleLogout,
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
-    ),
     );
   }
 }

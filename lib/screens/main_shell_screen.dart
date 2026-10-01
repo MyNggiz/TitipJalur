@@ -69,15 +69,25 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      extendBody: true,
+      extendBody: false,
       body: IndexedStack(
         index: _currentIndex,
         children: screens,
       ),
-      bottomNavigationBar: InteractiveBottomNav(
-        currentIndex: _currentIndex,
-        onTap: _onNavigateTab,
-        items: navItems,
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          heightFactor: 1.0,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: InteractiveBottomNav(
+              currentIndex: _currentIndex,
+              onTap: _onNavigateTab,
+              items: navItems,
+            ),
+          ),
+        ),
       ),
     );
   }

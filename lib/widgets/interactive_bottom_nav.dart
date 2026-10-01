@@ -43,8 +43,8 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(32),
@@ -123,7 +123,7 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       curve: Curves.easeInOut,
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
                         color: backgroundColor,
                         borderRadius: BorderRadius.circular(24),
@@ -146,7 +146,7 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                             children: [
                               Icon(
                                 currentIcon,
-                                size: 22,
+                                size: 20,
                                 color: foregroundColor,
                               ),
                               const SizedBox(height: 4),
@@ -156,8 +156,8 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
                                   color: foregroundColor,
                                 ),
                               ),

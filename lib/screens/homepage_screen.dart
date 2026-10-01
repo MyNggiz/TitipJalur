@@ -5,6 +5,7 @@ import '../models/errand_model.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../widgets/fade_slide_entry.dart';
+import '../widgets/responsive_container.dart';
 
 class HomepageScreen extends ConsumerStatefulWidget {
   const HomepageScreen({
@@ -122,51 +123,54 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 130),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Hero Banner
-            FadeSlideEntry.staggered(
-              index: 1,
-              child: _buildHeroBanner(),
-            ),
-            const SizedBox(height: 30),
-
-            // 2. Quick Actions
-            FadeSlideEntry.staggered(
-              index: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildQuickActionsHeader(),
-                  const SizedBox(height: 14),
-                  _buildQuickActionsGrid(context),
-                ],
+        child: ResponsiveContainer(
+          maxWidth: 650,
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Hero Banner
+              FadeSlideEntry.staggered(
+                index: 1,
+                child: _buildHeroBanner(),
               ),
-            ),
-            const SizedBox(height: 30),
+              const SizedBox(height: 18),
 
-            // 3. Step-by-Step Tutorial
-            FadeSlideEntry.staggered(
-              index: 3,
-              child: _buildTutorialSection(context),
-            ),
-            const SizedBox(height: 30),
+              // 2. Quick Actions
+              FadeSlideEntry.staggered(
+                index: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildQuickActionsHeader(),
+                    const SizedBox(height: 12),
+                    _buildQuickActionsGrid(context),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
 
-            // 4. Live Stats Kampus
-            FadeSlideEntry.staggered(
-              index: 4,
-              child: _buildLiveStatsSection(feedState),
-            ),
-            const SizedBox(height: 30),
+              // 3. Step-by-Step Tutorial
+              FadeSlideEntry.staggered(
+                index: 3,
+                child: _buildTutorialSection(context),
+              ),
+              const SizedBox(height: 18),
 
-            // 5. CTA Buttons
-            FadeSlideEntry.staggered(
-              index: 5,
-              child: _buildPrimaryCTAs(context),
-            ),
-          ],
+              // 4. Live Stats Kampus
+              FadeSlideEntry.staggered(
+                index: 4,
+                child: _buildLiveStatsSection(feedState),
+              ),
+              const SizedBox(height: 20),
+
+              // 5. CTA Buttons
+              FadeSlideEntry.staggered(
+                index: 5,
+                child: _buildPrimaryCTAs(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -182,21 +186,21 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: _primaryEmerald.withValues(alpha: 0.25),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: _primaryEmerald.withValues(alpha: 0.22),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(20),
@@ -204,39 +208,39 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.eco_rounded, color: Colors.white, size: 14),
-                SizedBox(width: 6),
+                Icon(Icons.eco_rounded, color: Colors.white, size: 13),
+                SizedBox(width: 5),
                 Text(
                   'Gerakan Kampus Ramah Lingkungan',
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     color: Colors.white,
-                    fontSize: 11,
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           const Text(
             'Titip Jalur: Nol Emisi, Hemat Waktu',
             style: TextStyle(
               fontFamily: 'Roboto',
               color: Colors.white,
-              fontSize: 21,
+              fontSize: 18,
               fontWeight: FontWeight.w800,
-              letterSpacing: -0.3,
+              letterSpacing: -0.2,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             'Crowdsourcing cerdas yang menghubungkan mahasiswa yang butuh barang dengan komuter yang searah jalan pulang atau menuju kelas.',
             style: TextStyle(
               fontFamily: 'Roboto',
               color: Colors.white.withValues(alpha: 0.92),
-              fontSize: 13,
-              height: 1.5,
+              fontSize: 12,
+              height: 1.4,
             ),
           ),
         ],
@@ -308,9 +312,9 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: 1.85,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 2.8,
       ),
       itemCount: actions.length,
       itemBuilder: (context, index) {
@@ -320,31 +324,31 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             Navigator.of(context).pushNamed(AppRoutes.createErrand);
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFFE5E7EB)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
                     color: item.bgTint,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(item.icon, color: item.color, size: 22),
+                  child: Icon(item.icon, color: item.color, size: 20),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,18 +359,18 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                         style: const TextStyle(
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w700,
-                          fontSize: 13,
+                          fontSize: 12.5,
                           color: Color(0xFF1F2937),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 3),
+                      const SizedBox(height: 2),
                       Text(
                         item.subtitle,
                         style: const TextStyle(
                           fontFamily: 'Roboto',
-                          fontSize: 11,
+                          fontSize: 10.5,
                           color: Color(0xFF9CA3AF),
                         ),
                         maxLines: 1,
@@ -418,16 +422,16 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -439,13 +443,13 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.auto_stories_rounded, color: _primaryEmerald, size: 22),
+                  Icon(Icons.auto_stories_rounded, color: _primaryEmerald, size: 20),
                   SizedBox(width: 8),
                   Text(
                     'Cara Kerja TitipJalur',
                     style: TextStyle(
                       fontFamily: 'Roboto',
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF111827),
                     ),
@@ -453,16 +457,16 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: _lightEmeraldBg,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
                   '3 Langkah Cepat',
                   style: TextStyle(
                     fontFamily: 'Roboto',
-                    fontSize: 11,
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w600,
                     color: _primaryEmerald,
                   ),
@@ -470,7 +474,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           // Stepper Tabs Indicator
           Row(
@@ -484,8 +488,8 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: index < tutorialSteps.length - 1 ? 8 : 0),
-                    height: 4,
+                    margin: EdgeInsets.only(right: index < tutorialSteps.length - 1 ? 6 : 0),
+                    height: 3.5,
                     decoration: BoxDecoration(
                       color: isSelected ? _primaryEmerald : const Color(0xFFE5E7EB),
                       borderRadius: BorderRadius.circular(2),
@@ -495,7 +499,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               );
             }),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
 
           // Expandable / Interactive Step Cards
           Column(
@@ -506,32 +510,32 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
-                margin: EdgeInsets.only(bottom: index < tutorialSteps.length - 1 ? 16 : 0),
+                margin: EdgeInsets.only(bottom: index < tutorialSteps.length - 1 ? 10 : 0),
                 decoration: BoxDecoration(
                   color: isExpanded ? _lightEmeraldBg.withValues(alpha: 0.5) : const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isExpanded ? _primaryEmerald.withValues(alpha: 0.4) : const Color(0xFFF3F4F6),
                     width: isExpanded ? 1.5 : 1.0,
                   ),
                 ),
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   onTap: () {
                     setState(() {
                       _activeStepIndex = index;
                     });
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Container(
-                              width: 34,
-                              height: 34,
+                              width: 26,
+                              height: 26,
                               decoration: BoxDecoration(
                                 color: isExpanded ? _primaryEmerald : const Color(0xFFE5E7EB),
                                 shape: BoxShape.circle,
@@ -542,13 +546,13 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: isExpanded ? Colors.white : const Color(0xFF4B5563),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 14),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -558,16 +562,16 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                     style: TextStyle(
                                       fontFamily: 'Roboto',
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       color: isExpanded ? _darkEmerald : const Color(0xFF1F2937),
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: 1),
                                   Text(
                                     step.summary,
                                     style: const TextStyle(
                                       fontFamily: 'Roboto',
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       color: Color(0xFF6B7280),
                                     ),
                                   ),
@@ -576,14 +580,15 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                             ),
                             Icon(
                               isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                              size: 20,
                               color: isExpanded ? _primaryEmerald : const Color(0xFF9CA3AF),
                             ),
                           ],
                         ),
                         if (isExpanded) ...[
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           Padding(
-                            padding: const EdgeInsets.only(left: 48),
+                            padding: const EdgeInsets.only(left: 36),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -591,14 +596,14 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                   step.description,
                                   style: const TextStyle(
                                     fontFamily: 'Roboto',
-                                    fontSize: 12.5,
+                                    fontSize: 12,
                                     color: Color(0xFF374151),
-                                    height: 1.45,
+                                    height: 1.4,
                                   ),
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 8),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                                   decoration: BoxDecoration(
                                     color: _primaryEmerald.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(6),
@@ -607,7 +612,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                     '# ${step.tag}',
                                     style: const TextStyle(
                                       fontFamily: 'Roboto',
-                                      fontSize: 11,
+                                      fontSize: 10.5,
                                       fontWeight: FontWeight.w600,
                                       color: _darkEmerald,
                                     ),
@@ -625,19 +630,19 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             }),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
                 _showP2PExplanationDialog(context);
               },
-              icon: const Icon(Icons.info_outline_rounded, size: 16, color: _primaryEmerald),
+              icon: const Icon(Icons.info_outline_rounded, size: 15, color: _primaryEmerald),
               label: const Text(
                 'Pelajari Sistem P2P TitipJalur',
                 style: TextStyle(
                   fontFamily: 'Roboto',
-                  fontSize: 12.5,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: _primaryEmerald,
                 ),
@@ -645,7 +650,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFFA7F3D0)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 10),
               ),
             ),
           ),
@@ -724,16 +729,16 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
     required Color accentColor,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -741,43 +746,43 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(6),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: accentColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(icon, size: 18, color: accentColor),
+            child: Icon(icon, size: 16, color: accentColor),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             value,
             style: const TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w800,
               color: Color(0xFF111827),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 3),
           Text(
             title,
             style: const TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 11,
+              fontSize: 10.5,
               fontWeight: FontWeight.w600,
               color: Color(0xFF4B5563),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 1),
           Text(
             subtext,
             style: const TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 10,
+              fontSize: 9.5,
               color: Color(0xFF9CA3AF),
             ),
             maxLines: 1,
@@ -793,35 +798,35 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       children: [
         SizedBox(
           width: double.infinity,
-          height: 50,
+          height: 44,
           child: ElevatedButton.icon(
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.createErrand);
             },
-            icon: const Icon(Icons.add_circle_outline_rounded, color: Colors.white),
+            icon: const Icon(Icons.add_circle_outline_rounded, color: Colors.white, size: 18),
             label: const Text(
               'Buat Permintaan Titip Baru',
               style: TextStyle(
                 fontFamily: 'Roboto',
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: _primaryEmerald,
-              elevation: 2,
-              shadowColor: _primaryEmerald.withValues(alpha: 0.4),
+              elevation: 1.5,
+              shadowColor: _primaryEmerald.withValues(alpha: 0.35),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
-          height: 50,
+          height: 44,
           child: OutlinedButton.icon(
             onPressed: () {
               if (widget.onExploreFeed != null) {
@@ -830,21 +835,21 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 Navigator.of(context).pushNamed(AppRoutes.dashboard);
               }
             },
-            icon: const Icon(Icons.explore_rounded, color: _primaryEmerald),
+            icon: const Icon(Icons.explore_rounded, color: _primaryEmerald, size: 18),
             label: const Text(
               'Jelajahi Feed Komuter Sekarang',
               style: TextStyle(
                 fontFamily: 'Roboto',
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
                 color: _primaryEmerald,
               ),
             ),
             style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: _primaryEmerald, width: 1.5),
+              side: const BorderSide(color: _primaryEmerald, width: 1.2),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),

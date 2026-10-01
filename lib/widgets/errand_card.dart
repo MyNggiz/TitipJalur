@@ -39,7 +39,7 @@ class ErrandCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -94,7 +94,7 @@ class ErrandCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
 
                 // Item title
                 Text(
@@ -108,11 +108,11 @@ class ErrandCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
 
                 // Route card
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF8FAFC),
                     borderRadius: BorderRadius.circular(10),
@@ -132,7 +132,8 @@ class ErrandCard extends StatelessWidget {
                             child: Text(
                               errand.pickup,
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontFamily: 'Roboto',
+                                fontSize: 11.5,
                                 color: Color(0xFF334155),
                                 fontWeight: FontWeight.w500,
                               ),
@@ -147,7 +148,7 @@ class ErrandCard extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
-                            height: 10,
+                            height: 8,
                             child: VerticalDivider(
                               color: Color(0xFFCBD5E1),
                               thickness: 1.2,
@@ -167,11 +168,11 @@ class ErrandCard extends StatelessWidget {
                             child: Text(
                               errand.dropoff,
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontFamily: 'Roboto',
+                                fontSize: 11.5,
                                 color: Color(0xFF334155),
                                 fontWeight: FontWeight.w500,
                               ),
-                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -180,7 +181,7 @@ class ErrandCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 12),
 
                 // Footer: tip, distance, and contextual action button
                 Row(
@@ -191,7 +192,7 @@ class ErrandCard extends StatelessWidget {
                         Text(
                           errand.formattedTip,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF059669),
                           ),
@@ -201,13 +202,14 @@ class ErrandCard extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.near_me_outlined,
-                              size: 12,
+                              size: 11,
                               color: Color(0xFF94A3B8),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 3),
                             Text(
                               '${errand.distanceKm.toStringAsFixed(1)} km',
                               style: const TextStyle(
+                                fontFamily: 'Roboto',
                                 fontSize: 11,
                                 color: Color(0xFF64748B),
                                 fontWeight: FontWeight.w500,
@@ -219,38 +221,48 @@ class ErrandCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     if (showAction && errand.status == OrderStatus.open)
-                      ElevatedButton.icon(
-                        onPressed: onAccept,
-                        icon: const Icon(Icons.handshake_outlined, size: 15),
-                        label: const Text('Ambil Titipan'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF059669),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          textStyle: const TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        height: 32,
+                        child: ElevatedButton.icon(
+                          onPressed: onAccept,
+                          icon: const Icon(Icons.handshake_outlined, size: 14),
+                          label: const Text('Ambil Titipan'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF059669),
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            textStyle: const TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       )
                     else if (onTap != null)
-                      TextButton.icon(
-                        onPressed: onTap,
-                        icon: const Icon(Icons.arrow_forward_rounded, size: 14),
-                        label: const Text('Detail'),
-                        iconAlignment: IconAlignment.end,
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFF059669),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          textStyle: const TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                      SizedBox(
+                        height: 32,
+                        child: TextButton.icon(
+                          onPressed: onTap,
+                          icon: const Icon(Icons.arrow_forward_rounded, size: 13),
+                          label: const Text('Detail'),
+                          iconAlignment: IconAlignment.end,
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF059669),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            textStyle: const TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),

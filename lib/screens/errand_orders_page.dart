@@ -4,6 +4,7 @@ import '../controllers/errand_feed_notifier.dart';
 import '../models/errand_model.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
+import '../widgets/responsive_container.dart';
 import '../widgets/errand_card.dart';
 import '../widgets/fade_slide_entry.dart';
 import '../widgets/state_view.dart';
@@ -133,7 +134,7 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
   Widget _buildStatusFilterChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: Row(
         children: StatusFilter.values.asMap().entries.map((entry) {
           final index = entry.key;
@@ -148,9 +149,13 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
               selected: isSelected,
               selectedColor: const Color(0xFF059669).withValues(alpha: 0.15),
               checkmarkColor: const Color(0xFF059669),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
               labelStyle: TextStyle(
                 fontFamily: 'Roboto',
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
                     ? const Color(0xFF059669)
@@ -312,7 +317,7 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
           ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(top: 8, bottom: 130),
+        padding: const EdgeInsets.only(top: 8, bottom: 24),
         itemCount: filtered.length,
         itemBuilder: (context, index) {
           final errand = filtered[index];
@@ -399,7 +404,7 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
           ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(top: 8, bottom: 130),
+        padding: const EdgeInsets.only(top: 8, bottom: 24),
         itemCount: filtered.length,
         itemBuilder: (context, index) {
           final errand = filtered[index];
@@ -465,82 +470,96 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicator: BoxDecoration(
-                color: const Color(0xFF059669),
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF059669).withValues(alpha: 0.25),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+          preferredSize: const Size.fromHeight(52),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 650),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: SizedBox(
+                  height: 44,
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicator: BoxDecoration(
+                      color: const Color(0xFF059669),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF059669).withValues(alpha: 0.25),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: const Color(0xFF64748B),
+                    dividerColor: Colors.transparent,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                    labelStyle: const TextStyle(
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                    unselectedLabelStyle: const TextStyle(
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                    tabs: const [
+                      Tab(
+                        icon: Icon(Icons.receipt_long_outlined, size: 16),
+                        iconMargin: EdgeInsets.only(bottom: 2),
+                        text: 'Permintaan Saya',
+                      ),
+                      Tab(
+                        icon: Icon(Icons.two_wheeler_outlined, size: 16),
+                        iconMargin: EdgeInsets.only(bottom: 2),
+                        text: 'Tugas Belanja / Antar',
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              labelColor: Colors.white,
-              unselectedLabelColor: const Color(0xFF64748B),
-              dividerColor: Colors.transparent,
-              labelStyle: const TextStyle(
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
-              ),
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.receipt_long_outlined, size: 18),
-                  text: 'Permintaan Saya',
                 ),
-                Tab(
-                  icon: Icon(Icons.two_wheeler_outlined, size: 18),
-                  text: 'Tugas Belanja / Antar',
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
-      body: Column(
-        children: [
-          _buildStatusFilterChips(),
-          Expanded(
-            child: errandFeedAsync.when(
-              loading: () => const LoadingStateView(
-                message: 'Memuat daftar pesanan titipan...',
-                color: Color(0xFF059669),
+      body: ResponsiveContainer(
+        maxWidth: 650,
+        child: Column(
+          children: [
+            _buildStatusFilterChips(),
+            Expanded(
+              child: errandFeedAsync.when(
+                loading: () => const LoadingStateView(
+                  message: 'Memuat daftar pesanan titipan...',
+                  color: Color(0xFF059669),
+                ),
+                error: (err, _) => ErrorStateView(
+                  title: 'Gagal Memuat Pesanan',
+                  message: err.toString(),
+                  onRetry: () =>
+                      ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
+                ),
+                data: (errands) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildMyRequestsTab(errands, currentUserName),
+                      _buildRunnerTasksTab(errands, currentUserName),
+                    ],
+                  );
+                },
               ),
-              error: (err, _) => ErrorStateView(
-                title: 'Gagal Memuat Pesanan',
-                message: err.toString(),
-                onRetry: () =>
-                    ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
-              ),
-              data: (errands) {
-                return TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildMyRequestsTab(errands, currentUserName),
-                    _buildRunnerTasksTab(errands, currentUserName),
-                  ],
-                );
-              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
