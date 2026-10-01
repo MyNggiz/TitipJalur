@@ -14,6 +14,8 @@ abstract class ErrandRepository {
   });
 
   Future<ErrandModel> acceptErrand(String id);
+
+  Future<ErrandModel> completeErrand(String id);
 }
 
 class ErrandRepositoryImpl implements ErrandRepository {
@@ -64,6 +66,18 @@ class ErrandRepositoryImpl implements ErrandRepository {
       throw Exception('Titipan dengan ID $id tidak ditemukan.');
     }
     final updated = _errands[index].copyWith(status: OrderStatus.accepted);
+    _errands[index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<ErrandModel> completeErrand(String id) async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final index = _errands.indexWhere((element) => element.id == id);
+    if (index == -1) {
+      throw Exception('Titipan dengan ID $id tidak ditemukan.');
+    }
+    final updated = _errands[index].copyWith(status: OrderStatus.completed);
     _errands[index] = updated;
     return updated;
   }

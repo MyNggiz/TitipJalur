@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text.trim(),
       );
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await AuthService.instance.loginAsGuest();
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
     } finally {
       if (mounted) setState(() => _isGuestLoading = false);
     }

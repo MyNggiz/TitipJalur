@@ -10,7 +10,8 @@ import '../widgets/state_view.dart';
 import 'create_errand_screen.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
-  const DashboardScreen({super.key});
+  final bool isEmbedded;
+  const DashboardScreen({super.key, this.isEmbedded = false});
 
   @override
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();

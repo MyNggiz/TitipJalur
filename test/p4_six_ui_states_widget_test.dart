@@ -60,6 +60,16 @@ class MockErrandRepository implements ErrandRepository {
     }
     throw Exception('Order tidak ditemukan');
   }
+  @override
+  Future<ErrandModel> completeErrand(String id) async {
+    final index = items.indexWhere((e) => e.id == id);
+    if (index != -1) {
+      final updated = items[index].copyWith(status: OrderStatus.completed);
+      items[index] = updated;
+      return updated;
+    }
+    throw Exception('Order tidak ditemukan');
+  }
 }
 
 void main() {
@@ -327,6 +337,8 @@ class _CustomFeedNotifier
 
   @override
   Future<void> retry() async {}
+  @override
+  Future<void> completeErrand(String id) async {}
 }
 
 class _CustomFormNotifier extends StateNotifier<ErrandFormState>

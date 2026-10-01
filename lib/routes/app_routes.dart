@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/errand_model.dart';
-import '../screens/dashboard_screen.dart';
 import '../screens/detail_screen.dart';
 import '../screens/login_screen.dart';
+import '../screens/main_shell_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/create_errand_screen.dart';
 
@@ -12,6 +12,9 @@ class AppRoutes {
   static const String login = '/';
   static const String loginPath = '/login';
   static const String dashboard = '/dashboard';
+  static const String home = '/home';
+  static const String orders = '/orders';
+  static const String accountSettings = '/settings';
   static const String detail = '/detail';
   static const String profile = '/profile';
   static const String createErrand = '/create-errand';
@@ -26,7 +29,22 @@ class AppRoutes {
         );
       case dashboard:
         return MaterialPageRoute(
-          builder: (_) => const DashboardScreen(),
+          builder: (_) => const MainShellScreen(initialIndex: 1),
+          settings: settings,
+        );
+      case home:
+        return MaterialPageRoute(
+          builder: (_) => const MainShellScreen(initialIndex: 0),
+          settings: settings,
+        );
+      case orders:
+        return MaterialPageRoute(
+          builder: (_) => const MainShellScreen(initialIndex: 2),
+          settings: settings,
+        );
+      case accountSettings:
+        return MaterialPageRoute(
+          builder: (_) => const MainShellScreen(initialIndex: 3),
           settings: settings,
         );
       case detail:

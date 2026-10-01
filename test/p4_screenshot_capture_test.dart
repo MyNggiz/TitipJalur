@@ -22,6 +22,9 @@ class _MockFeedNotifier extends StateNotifier<AsyncValue<List<ErrandModel>>>
 
   @override
   Future<void> acceptErrand(String id) async {}
+  @override
+  Future<void> completeErrand(String id) async {}
+
 
   @override
   Future<void> loadErrands(

@@ -41,8 +41,13 @@ void main() {
       await tester.tap(guestBtn);
       await tester.pumpAndSettle();
 
-      // Should arrive at Dashboard
+      // Should arrive at Homepage with welcome greeting
       expect(find.textContaining('Halo,'), findsOneWidget);
+      expect(find.textContaining('Nol Emisi, Hemat Waktu'), findsOneWidget);
+
+      // Switch to Feed Rute tab to verify feed elements
+      await tester.tap(find.text('Feed Rute'));
+      await tester.pumpAndSettle();
       expect(find.textContaining('Radius Pengantaran:'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
       expect(find.text('Kantin'), findsWidgets);
