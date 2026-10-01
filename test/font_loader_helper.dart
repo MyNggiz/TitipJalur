@@ -6,12 +6,22 @@ Future<void> loadRealFonts() async {
   final fontDir = Directory('/home/mynggiz/development/flutter/bin/cache/artifacts/material_fonts');
   if (!fontDir.existsSync()) return;
 
-  final fontLoader = FontLoader('Roboto');
+  // 1. Load Roboto fonts (Regular, Bold, Medium, etc.)
+  final robotoLoader = FontLoader('Roboto');
   for (final file in fontDir.listSync()) {
-    if (file is File && file.path.endsWith('.ttf')) {
+    if (file is File && file.path.contains('Roboto') && file.path.endsWith('.ttf')) {
       final bytes = file.readAsBytesSync();
-      fontLoader.addFont(Future.value(ByteData.view(bytes.buffer)));
+      robotoLoader.addFont(Future.value(ByteData.view(bytes.buffer)));
     }
   }
-  await fontLoader.load();
+  await robotoLoader.load();
+
+  // 2. Load MaterialIcons font
+  final iconFile = File('${fontDir.path}/MaterialIcons-Regular.otf');
+  if (iconFile.existsSync()) {
+    final iconLoader = FontLoader('MaterialIcons');
+    final bytes = iconFile.readAsBytesSync();
+    iconLoader.addFont(Future.value(ByteData.view(bytes.buffer)));
+    await iconLoader.load();
+  }
 }

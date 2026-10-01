@@ -79,9 +79,20 @@ void main() {
               (ref) => _MockFeedNotifier(const AsyncValue.loading()),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: DashboardScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const DashboardScreen(),
           ),
         ),
       );
@@ -139,9 +150,20 @@ void main() {
               (ref) => _MockFeedNotifier(AsyncValue.data(orders)),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: DashboardScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const DashboardScreen(),
           ),
         ),
       );
@@ -166,9 +188,20 @@ void main() {
               (ref) => _MockFeedNotifier(const AsyncValue.data([])),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: DashboardScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const DashboardScreen(),
           ),
         ),
       );
@@ -198,9 +231,20 @@ void main() {
               ),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: DashboardScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const DashboardScreen(),
           ),
         ),
       );
@@ -236,9 +280,20 @@ void main() {
               ),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: CreateErrandScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const CreateErrandScreen(),
           ),
         ),
       );
@@ -272,9 +327,20 @@ void main() {
               ),
             ),
           ],
-          child: const MaterialApp(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: CreateErrandScreen(),
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Roboto',
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF059669),
+                primary: const Color(0xFF059669),
+                surface: Colors.white,
+                brightness: Brightness.light,
+              ),
+              scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+            ),
+            home: const CreateErrandScreen(),
           ),
         ),
       );
