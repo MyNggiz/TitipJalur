@@ -5,6 +5,7 @@ import '../models/errand_model.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../widgets/errand_card.dart';
+import '../widgets/fade_slide_entry.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/state_view.dart';
 import 'create_errand_screen.dart';
@@ -324,7 +325,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           // Filter Section (Radius Slider + Category Chips)
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -384,6 +385,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 16),
 
                 // Category Chips
                 SingleChildScrollView(
@@ -392,7 +394,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     children: _categories.map((cat) {
                       final isSelected = _selectedCategory == cat;
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsets.only(right: 10),
                         child: FilterChip(
                           selected: isSelected,
                           label: Text(cat),
@@ -494,7 +496,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          top: 16,
+                          bottom: 12,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -520,22 +527,29 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          padding: const EdgeInsets.only(top: 4, bottom: 84),
+                          padding: const EdgeInsets.only(top: 8, bottom: 130),
                           itemCount: filtered.length,
                           itemBuilder: (context, index) {
                             final errand = filtered[index];
-                            return ErrandCard(
-                              errand: errand,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.detail,
-                                  arguments: errand,
-                                );
-                              },
-                              onAccept: errand.status == OrderStatus.open
-                                  ? () => _handleAcceptErrand(errand)
-                                  : null,
+                            return FadeSlideEntry.staggered(
+                              index: index,
+                              child: ErrandCard(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 8,
+                                ),
+                                errand: errand,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.detail,
+                                    arguments: errand,
+                                  );
+                                },
+                                onAccept: errand.status == OrderStatus.open
+                                    ? () => _handleAcceptErrand(errand)
+                                    : null,
+                              ),
                             );
                           },
                         ),

@@ -4,6 +4,7 @@ import '../controllers/errand_feed_notifier.dart';
 import '../models/errand_model.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
+import '../widgets/fade_slide_entry.dart';
 
 class HomepageScreen extends ConsumerStatefulWidget {
   const HomepageScreen({
@@ -39,103 +40,132 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         titleSpacing: 20,
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: _lightEmeraldBg,
-              child: Text(
-                userInitial,
-                style: const TextStyle(
-                  color: _primaryEmerald,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+        title: FadeSlideEntry.staggered(
+          index: 0,
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: _lightEmeraldBg,
+                child: Text(
+                  userInitial,
+                  style: const TextStyle(
+                    fontFamily: 'Roboto',
+                    color: _primaryEmerald,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Halo, $userName 👋',
-                    style: const TextStyle(
-                      color: Color(0xFF111827),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Halo, $userName 👋',
+                      style: const TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Color(0xFF111827),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF10B981),
-                          shape: BoxShape.circle,
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF10B981),
+                            shape: BoxShape.circle,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      const Text(
-                        'Komuter Siap Bantu',
-                        style: TextStyle(
-                          color: Color(0xFF6B7280),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                        const SizedBox(width: 6),
+                        const Text(
+                          'Komuter Siap Bantu',
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: Color(0xFF6B7280),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none_rounded, color: Color(0xFF374151)),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Belum ada notifikasi baru.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
+          FadeSlideEntry.staggered(
+            index: 0,
+            child: IconButton(
+              icon: const Icon(Icons.notifications_none_rounded, color: Color(0xFF374151)),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Belum ada notifikasi baru.'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(width: 8),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 130),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. Hero Banner
-            _buildHeroBanner(),
-            const SizedBox(height: 24),
+            FadeSlideEntry.staggered(
+              index: 1,
+              child: _buildHeroBanner(),
+            ),
+            const SizedBox(height: 30),
 
             // 2. Quick Actions
-            _buildQuickActionsHeader(),
-            const SizedBox(height: 12),
-            _buildQuickActionsGrid(context),
-            const SizedBox(height: 28),
+            FadeSlideEntry.staggered(
+              index: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildQuickActionsHeader(),
+                  const SizedBox(height: 14),
+                  _buildQuickActionsGrid(context),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
 
             // 3. Step-by-Step Tutorial
-            _buildTutorialSection(context),
-            const SizedBox(height: 28),
+            FadeSlideEntry.staggered(
+              index: 3,
+              child: _buildTutorialSection(context),
+            ),
+            const SizedBox(height: 30),
 
             // 4. Live Stats Kampus
-            _buildLiveStatsSection(feedState),
-            const SizedBox(height: 28),
+            FadeSlideEntry.staggered(
+              index: 4,
+              child: _buildLiveStatsSection(feedState),
+            ),
+            const SizedBox(height: 30),
 
             // 5. CTA Buttons
-            _buildPrimaryCTAs(context),
-            const SizedBox(height: 32),
+            FadeSlideEntry.staggered(
+              index: 5,
+              child: _buildPrimaryCTAs(context),
+            ),
           ],
         ),
       ),
@@ -161,7 +191,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -175,10 +205,11 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.eco_rounded, color: Colors.white, size: 14),
-                SizedBox(width: 5),
+                SizedBox(width: 6),
                 Text(
                   'Gerakan Kampus Ramah Lingkungan',
                   style: TextStyle(
+                    fontFamily: 'Roboto',
                     color: Colors.white,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
@@ -187,23 +218,25 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           const Text(
             'Titip Jalur: Nol Emisi, Hemat Waktu',
             style: TextStyle(
+              fontFamily: 'Roboto',
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 21,
               fontWeight: FontWeight.w800,
               letterSpacing: -0.3,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             'Crowdsourcing cerdas yang menghubungkan mahasiswa yang butuh barang dengan komuter yang searah jalan pulang atau menuju kelas.',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              fontFamily: 'Roboto',
+              color: Colors.white.withValues(alpha: 0.92),
               fontSize: 13,
-              height: 1.45,
+              height: 1.5,
             ),
           ),
         ],
@@ -219,7 +252,8 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         Text(
           'Mau Titip Apa Hari Ini?',
           style: TextStyle(
-            fontSize: 17,
+            fontFamily: 'Roboto',
+            fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Color(0xFF111827),
           ),
@@ -227,7 +261,11 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         SizedBox(height: 4),
         Text(
           'Pilih kategori cepat untuk membuat permintaan titip',
-          style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 13,
+            color: Color(0xFF6B7280),
+          ),
         ),
       ],
     );
@@ -270,9 +308,9 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1.7,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
+        childAspectRatio: 1.85,
       ),
       itemCount: actions.length,
       itemBuilder: (context, index) {
@@ -282,7 +320,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             Navigator.of(context).pushNamed(AppRoutes.createErrand);
           },
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -306,7 +344,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                   ),
                   child: Icon(item.icon, color: item.color, size: 22),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,6 +353,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                       Text(
                         item.title,
                         style: const TextStyle(
+                          fontFamily: 'Roboto',
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
                           color: Color(0xFF1F2937),
@@ -322,10 +361,11 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 3),
                       Text(
                         item.subtitle,
                         style: const TextStyle(
+                          fontFamily: 'Roboto',
                           fontSize: 11,
                           color: Color(0xFF9CA3AF),
                         ),
@@ -342,6 +382,8 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       },
     );
   }
+
+  // Quick actions implementation integrated above
 
   // --- 3. TUTORIAL SECTION ---
   Widget _buildTutorialSection(BuildContext context) {
@@ -376,7 +418,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -397,12 +439,13 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.auto_stories_rounded, color: _primaryEmerald, size: 20),
+                  Icon(Icons.auto_stories_rounded, color: _primaryEmerald, size: 22),
                   SizedBox(width: 8),
                   Text(
                     'Cara Kerja TitipJalur',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontFamily: 'Roboto',
+                      fontSize: 17,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF111827),
                     ),
@@ -410,7 +453,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: _lightEmeraldBg,
                   borderRadius: BorderRadius.circular(8),
@@ -418,6 +461,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 child: const Text(
                   '3 Langkah Cepat',
                   style: TextStyle(
+                    fontFamily: 'Roboto',
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: _primaryEmerald,
@@ -426,7 +470,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
           // Stepper Tabs Indicator
           Row(
@@ -440,7 +484,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: index < tutorialSteps.length - 1 ? 6 : 0),
+                    margin: EdgeInsets.only(right: index < tutorialSteps.length - 1 ? 8 : 0),
                     height: 4,
                     decoration: BoxDecoration(
                       color: isSelected ? _primaryEmerald : const Color(0xFFE5E7EB),
@@ -451,7 +495,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               );
             }),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
           // Expandable / Interactive Step Cards
           Column(
@@ -462,32 +506,32 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
-                margin: const EdgeInsets.only(bottom: 10),
+                margin: EdgeInsets.only(bottom: index < tutorialSteps.length - 1 ? 16 : 0),
                 decoration: BoxDecoration(
                   color: isExpanded ? _lightEmeraldBg.withValues(alpha: 0.5) : const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: isExpanded ? _primaryEmerald.withValues(alpha: 0.4) : const Color(0xFFF3F4F6),
                     width: isExpanded ? 1.5 : 1.0,
                   ),
                 ),
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(16),
                   onTap: () {
                     setState(() {
                       _activeStepIndex = index;
                     });
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Container(
-                              width: 32,
-                              height: 32,
+                              width: 34,
+                              height: 34,
                               decoration: BoxDecoration(
                                 color: isExpanded ? _primaryEmerald : const Color(0xFFE5E7EB),
                                 shape: BoxShape.circle,
@@ -496,14 +540,15 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                 child: Text(
                                   '${step.stepNumber}',
                                   style: TextStyle(
+                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     color: isExpanded ? Colors.white : const Color(0xFF4B5563),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 14),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,15 +556,18 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                   Text(
                                     step.title,
                                     style: TextStyle(
+                                      fontFamily: 'Roboto',
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 13,
+                                      fontSize: 14,
                                       color: isExpanded ? _darkEmerald : const Color(0xFF1F2937),
                                     ),
                                   ),
+                                  const SizedBox(height: 2),
                                   Text(
                                     step.summary,
                                     style: const TextStyle(
-                                      fontSize: 11,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 12,
                                       color: Color(0xFF6B7280),
                                     ),
                                   ),
@@ -533,23 +581,24 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                           ],
                         ),
                         if (isExpanded) ...[
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           Padding(
-                            padding: const EdgeInsets.only(left: 44),
+                            padding: const EdgeInsets.only(left: 48),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   step.description,
                                   style: const TextStyle(
-                                    fontSize: 12,
+                                    fontFamily: 'Roboto',
+                                    fontSize: 12.5,
                                     color: Color(0xFF374151),
                                     height: 1.45,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 10),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                                   decoration: BoxDecoration(
                                     color: _primaryEmerald.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(6),
@@ -557,7 +606,8 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                                   child: Text(
                                     '# ${step.tag}',
                                     style: const TextStyle(
-                                      fontSize: 10,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: _darkEmerald,
                                     ),
@@ -575,7 +625,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             }),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -586,7 +636,8 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               label: const Text(
                 'Pelajari Sistem P2P TitipJalur',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontFamily: 'Roboto',
+                  fontSize: 12.5,
                   fontWeight: FontWeight.w600,
                   color: _primaryEmerald,
                 ),
@@ -594,7 +645,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFFA7F3D0)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
           ),
@@ -614,12 +665,13 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       children: [
         const Row(
           children: [
-            Icon(Icons.insights_rounded, color: _primaryEmerald, size: 18),
+            Icon(Icons.insights_rounded, color: _primaryEmerald, size: 20),
             SizedBox(width: 8),
             Text(
               'Ringkasan Ekosistem Kampus',
               style: TextStyle(
-                fontSize: 16,
+                fontFamily: 'Roboto',
+                fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF111827),
               ),
@@ -638,7 +690,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 accentColor: const Color(0xFF0284C7),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: _buildMetricCard(
                 title: 'Waktu Antar',
@@ -648,7 +700,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
                 accentColor: const Color(0xFFEA580C),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: _buildMetricCard(
                 title: 'Emisi Karbon',
@@ -672,50 +724,60 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
     required Color accentColor,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: accentColor),
-          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: accentColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 18, color: accentColor),
+          ),
+          const SizedBox(height: 12),
           Text(
             value,
             style: const TextStyle(
-              fontSize: 13,
+              fontFamily: 'Roboto',
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: Color(0xFF111827),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             title,
             style: const TextStyle(
-              fontSize: 10,
+              fontFamily: 'Roboto',
+              fontSize: 11,
               fontWeight: FontWeight.w600,
               color: Color(0xFF4B5563),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 1),
+          const SizedBox(height: 2),
           Text(
             subtext,
             style: const TextStyle(
-              fontSize: 9,
+              fontFamily: 'Roboto',
+              fontSize: 10,
               color: Color(0xFF9CA3AF),
             ),
             maxLines: 1,
@@ -725,7 +787,6 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
       ),
     );
   }
-
   // --- 5. PRIMARY CTA BUTTONS ---
   Widget _buildPrimaryCTAs(BuildContext context) {
     return Column(
@@ -741,6 +802,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             label: const Text(
               'Buat Permintaan Titip Baru',
               style: TextStyle(
+                fontFamily: 'Roboto',
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -759,7 +821,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          height: 48,
+          height: 50,
           child: OutlinedButton.icon(
             onPressed: () {
               if (widget.onExploreFeed != null) {
@@ -772,6 +834,7 @@ class _HomepageScreenState extends ConsumerState<HomepageScreen> {
             label: const Text(
               'Jelajahi Feed Komuter Sekarang',
               style: TextStyle(
+                fontFamily: 'Roboto',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: _primaryEmerald,

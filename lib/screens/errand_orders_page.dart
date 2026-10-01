@@ -5,8 +5,8 @@ import '../models/errand_model.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../widgets/errand_card.dart';
+import '../widgets/fade_slide_entry.dart';
 import '../widgets/state_view.dart';
-
 enum StatusFilter {
   all('Semua', null),
   open('Terbuka (Open)', OrderStatus.open),
@@ -133,18 +133,23 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
   Widget _buildStatusFilterChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       child: Row(
-        children: StatusFilter.values.map((filter) {
+        children: StatusFilter.values.asMap().entries.map((entry) {
+          final index = entry.key;
+          final filter = entry.value;
           final isSelected = _selectedFilter == filter;
           return Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(
+              right: index == StatusFilter.values.length - 1 ? 0 : 10,
+            ),
             child: FilterChip(
               label: Text(filter.label),
               selected: isSelected,
               selectedColor: const Color(0xFF059669).withValues(alpha: 0.15),
               checkmarkColor: const Color(0xFF059669),
               labelStyle: TextStyle(
+                fontFamily: 'Roboto',
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
@@ -270,29 +275,33 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
             ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            EmptyStateView(
-              title: 'Belum Ada Permintaan',
-              message: _selectedFilter == StatusFilter.all
-                  ? 'Anda belum membuat pesanan titipan saat ini.'
-                  : 'Tidak ada titipan dengan status "${_selectedFilter.label}".',
-              icon: Icons.assignment_outlined,
-              action: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.createErrand);
-                },
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text('Buat Titipan Baru'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF059669),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 32),
+            FadeSlideEntry(
+              child: EmptyStateView(
+                title: 'Belum Ada Permintaan',
+                message: _selectedFilter == StatusFilter.all
+                    ? 'Anda belum membuat pesanan titipan saat ini.'
+                    : 'Tidak ada titipan dengan status "${_selectedFilter.label}".',
+                icon: Icons.assignment_outlined,
+                action: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.createErrand);
+                  },
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Buat Titipan Baru'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF059669),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 80),
           ],
         ),
       );
@@ -303,29 +312,33 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
           ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(top: 8, bottom: 130),
         itemCount: filtered.length,
         itemBuilder: (context, index) {
           final errand = filtered[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Column(
-              children: [
-                ErrandCard(
-                  errand: errand,
-                  showAction: false,
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.detail,
-                      arguments: errand,
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildTrackingBanner(errand),
-                ),
-              ],
+          return FadeSlideEntry.staggered(
+            key: ValueKey('req_${errand.id}_$index'),
+            index: index,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Column(
+                children: [
+                  ErrandCard(
+                    errand: errand,
+                    showAction: false,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.detail,
+                        arguments: errand,
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildTrackingBanner(errand),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -349,29 +362,33 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
             ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            EmptyStateView(
-              title: 'Belum Ada Tugas Belanja',
-              message: _selectedFilter == StatusFilter.all
-                  ? 'Anda belum mengambil tugas titipan sebagai Runner.'
-                  : 'Tidak ada tugas dengan status "${_selectedFilter.label}".',
-              icon: Icons.delivery_dining_outlined,
-              action: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.dashboard);
-                },
-                icon: const Icon(Icons.explore_outlined, size: 18),
-                label: const Text('Cari Titipan Terdekat'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF059669),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            const SizedBox(height: 32),
+            FadeSlideEntry(
+              child: EmptyStateView(
+                title: 'Belum Ada Tugas Belanja',
+                message: _selectedFilter == StatusFilter.all
+                    ? 'Anda belum mengambil tugas titipan sebagai Runner.'
+                    : 'Tidak ada tugas dengan status "${_selectedFilter.label}".',
+                icon: Icons.delivery_dining_outlined,
+                action: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.dashboard);
+                  },
+                  icon: const Icon(Icons.explore_outlined, size: 18),
+                  label: const Text('Cari Titipan Terdekat'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF059669),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 80),
           ],
         ),
       );
@@ -382,39 +399,43 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
           ref.read(errandFeedNotifierProvider.notifier).loadErrands(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(top: 8, bottom: 130),
         itemCount: filtered.length,
         itemBuilder: (context, index) {
           final errand = filtered[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Column(
-              children: [
-                ErrandCard(
-                  errand: errand,
-                  showAction: errand.status == OrderStatus.open,
-                  onAccept: () {
-                    ref
-                        .read(errandFeedNotifierProvider.notifier)
-                        .acceptErrand(errand.id);
-                  },
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.detail,
-                      arguments: errand,
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      _buildTrackingBanner(errand),
-                      _buildRunnerActionButton(errand),
-                    ],
+          return FadeSlideEntry.staggered(
+            key: ValueKey('task_${errand.id}_$index'),
+            index: index,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Column(
+                children: [
+                  ErrandCard(
+                    errand: errand,
+                    showAction: errand.status == OrderStatus.open,
+                    onAccept: () {
+                      ref
+                          .read(errandFeedNotifierProvider.notifier)
+                          .acceptErrand(errand.id);
+                    },
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.detail,
+                        arguments: errand,
+                      );
+                    },
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        _buildTrackingBanner(errand),
+                        _buildRunnerActionButton(errand),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -434,6 +455,7 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
         title: const Text(
           'Manajemen Pesanan',
           style: TextStyle(
+            fontFamily: 'Roboto',
             fontWeight: FontWeight.bold,
             color: Color(0xFF0F172A),
             fontSize: 18,
@@ -443,34 +465,48 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
+          preferredSize: const Size.fromHeight(56),
           child: Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
-              ),
+            margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(25),
             ),
             child: TabBar(
               controller: _tabController,
-              indicatorColor: const Color(0xFF059669),
-              indicatorWeight: 3,
-              labelColor: const Color(0xFF059669),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: BoxDecoration(
+                color: const Color(0xFF059669),
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF059669).withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              labelColor: Colors.white,
               unselectedLabelColor: const Color(0xFF64748B),
+              dividerColor: Colors.transparent,
               labelStyle: const TextStyle(
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 13,
               ),
               unselectedLabelStyle: const TextStyle(
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.w500,
-                fontSize: 14,
+                fontSize: 13,
               ),
               tabs: const [
                 Tab(
-                  icon: Icon(Icons.receipt_long_outlined, size: 20),
+                  icon: Icon(Icons.receipt_long_outlined, size: 18),
                   text: 'Permintaan Saya',
                 ),
                 Tab(
-                  icon: Icon(Icons.two_wheeler_outlined, size: 20),
+                  icon: Icon(Icons.two_wheeler_outlined, size: 18),
                   text: 'Tugas Belanja / Antar',
                 ),
               ],

@@ -43,25 +43,20 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(32),
           border: Border.all(
             color: _borderColor,
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-            BoxShadow(
-              color: _primaryEmerald.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: const Color(0xFF0F172A).withValues(alpha: 0.08),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -76,10 +71,9 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
             double targetScale = 1.0;
             if (isPressed) {
               targetScale = 0.92;
-            } else if (isHovered) {
-              targetScale = 1.05;
+            } else if (isHovered && !isSelected) {
+              targetScale = 1.04;
             }
-
             final Color activeBgColor = _primaryEmerald;
             final Color inactiveBgColor = isHovered
                 ? _primaryEmerald.withValues(alpha: 0.08)
@@ -124,15 +118,24 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                   },
                   child: AnimatedScale(
                     scale: targetScale,
-                    duration: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 150),
                     curve: Curves.easeInOut,
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 150),
                       curve: Curves.easeInOut,
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                       decoration: BoxDecoration(
                         color: backgroundColor,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: _primaryEmerald.withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : null,
                       ),
                       child: Stack(
                         clipBehavior: Clip.none,
@@ -152,8 +155,9 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                   color: foregroundColor,
                                 ),
                               ),
