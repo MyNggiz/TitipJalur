@@ -7,6 +7,7 @@ import 'package:titip_jalur/models/errand_model.dart';
 import 'package:titip_jalur/repositories/errand_repository.dart';
 import 'package:titip_jalur/screens/create_errand_screen.dart';
 import 'package:titip_jalur/screens/dashboard_screen.dart';
+import 'font_loader_helper.dart';
 
 class _MockFeedNotifier extends StateNotifier<AsyncValue<List<ErrandModel>>>
     implements ErrandFeedNotifier {
@@ -61,6 +62,9 @@ class _MockFormNotifier extends StateNotifier<ErrandFormState>
 }
 
 void main() {
+  setUpAll(() async {
+    await loadRealFonts();
+  });
   group('P4 Widget Test Screenshot Capture', () {
     testWidgets('State 1: Initial Loading', (tester) async {
       tester.view.physicalSize = const Size(412, 915); // Standard modern phone size
