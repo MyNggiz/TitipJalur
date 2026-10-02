@@ -331,24 +331,30 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.radar_rounded,
-                          size: 18,
-                          color: Color(0xFF059669),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Radius Pengantaran: ${_radiusKm.toStringAsFixed(1)} km',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1E293B),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.radar_rounded,
+                            size: 18,
+                            color: Color(0xFF059669),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              'Radius Pengantaran: ${_radiusKm.toStringAsFixed(1)} km',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF1E293B),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Text(
                       'Max: 5.0 km',
                       style: TextStyle(
@@ -491,13 +497,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Titipan Tersedia (${filtered.length})',
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0xFF334155),
+                            Flexible(
+                              child: Text(
+                                'Titipan Tersedia (${filtered.length})',
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF334155),
+                                ),
                               ),
                             ),
+                            const SizedBox(width: 8),
                             Text(
                               'P2P Kampus',
                               style: theme.textTheme.bodySmall?.copyWith(
