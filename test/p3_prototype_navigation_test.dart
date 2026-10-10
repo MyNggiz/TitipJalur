@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,10 @@ import 'package:titip_jalur/widgets/state_view.dart';
 
 void main() {
   group('Tugas P3: Prototype, Routing, and Reusable Widgets Tests', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
     testWidgets('Renders LoginScreen on startup with logo, fields, and login buttons',
         (tester) async {
       await tester.pumpWidget(const ProviderScope(child: TitipJalurApp()));

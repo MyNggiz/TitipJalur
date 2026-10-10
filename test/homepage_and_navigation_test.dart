@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,10 @@ import 'package:titip_jalur/widgets/interactive_bottom_nav.dart';
 
 void main() {
   group('Homepage & Interactive Bottom Nav Multi-Page Tests', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
     testWidgets('Guest login lands on HomepageScreen with tutorial and live stats',
         (tester) async {
       await tester.pumpWidget(const ProviderScope(child: TitipJalurApp()));

@@ -70,6 +70,11 @@ class MockErrandRepository implements ErrandRepository {
     }
     throw Exception('Order tidak ditemukan');
   }
+
+  @override
+  Future<void> deleteErrand(String id) async {
+    items.removeWhere((e) => e.id == id);
+  }
 }
 
 void main() {
@@ -339,6 +344,9 @@ class _CustomFeedNotifier
   Future<void> retry() async {}
   @override
   Future<void> completeErrand(String id) async {}
+
+  @override
+  Future<void> deleteErrand(String id) async {}
 }
 
 class _CustomFormNotifier extends StateNotifier<ErrandFormState>

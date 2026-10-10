@@ -60,6 +60,20 @@ class ErrandFeedNotifier extends StateNotifier<AsyncValue<List<ErrandModel>>> {
       rethrow;
     }
   }
+
+  Future<void> deleteErrand(String id) async {
+    try {
+      await _repository.deleteErrand(id);
+      final current = state.valueOrNull;
+      if (current != null) {
+        state = AsyncValue.data(
+          current.where((item) => item.id != id).toList(),
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 final errandFeedNotifierProvider =
