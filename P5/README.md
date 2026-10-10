@@ -2,7 +2,7 @@
 **MVP Version 1 Iterative Engineering with AI Agent**
 
 > **Mata Kuliah:** Pemrograman Mobile (Era AI Agent) — Semester 5  
-> **Dosen Pengampu:** Dr. Haryono  
+> **Dosen Pengampu:**  Haryono  
 > **Aplikasi:** TitipJalur (*Peer-to-Peer Micro-Errand & Commuter Delivery Platform*)  
 > **Mahasiswa / Reviewer:** Muhammad Naufal Fahrel (NIM: 22051204001)  
 > **Status Verifikasi:** MVP Version 1 Selesai, Teruji Penuh, dan Lulus Verifikasi (32/32 Tests Passed)  
@@ -19,7 +19,7 @@ Untuk memenuhi standar kelengkapan tugas di repositori dan portal penilaian, dok
 
 ## 2. Ringkasan Eksekutif MVP Version 1
 
-Sesuai arahan Dr. Haryono pada Pertemuan 5, saya **tidak meminta AI Agent untuk "membuat aplikasi sepenuhnya sekaligus"**. Sebaliknya, saya memecah pengembangan MVP v1 menjadi **dua fitur inti** yang dikerjakan secara bertahap dan terukur:
+Sesuai arahan pak Haryono pada Pertemuan 5, saya **tidak meminta AI Agent untuk "membuat aplikasi sepenuhnya sekaligus"**. Sebaliknya, saya memecah pengembangan MVP v1 menjadi **dua fitur inti** yang dikerjakan secara bertahap dan terukur:
 
 $$\text{Fitur 1 (Persistensi Lokal CRUD)} \longrightarrow \text{Fitur 2 (Filter Radius & Alur Dua-Sisi)}$$
 
@@ -136,7 +136,7 @@ Berikut adalah commit Git resmi pada Pertemuan 5 di branch `main`:
 
 ## 7. Panduan Demo Singkat di Depan Dosen
 
-Berikut adalah 5 langkah demonstrasi interaktif yang siap saya demokan di depan Dr. Haryono:
+Berikut adalah 5 langkah demonstrasi interaktif yang siap saya demokan di depan pak Haryono:
 
 1. **Langkah 1 (Buat Titipan & Bukti Persistensi):**  
    Buka aplikasi $\rightarrow$ Masuk sebagai Tamu Kampus $\rightarrow$ Tekan tombol *"+ Titip Cepat"* $\rightarrow$ Masukkan item *"Nasi Padang Rendang"*, pickup *"Kantin Pusat"*, dropoff *"Lab RPL"*, tip *"Rp 8.000"* $\rightarrow$ Tekan *Kirim*. Pesanan langsung muncul di posisi teratas feed.
