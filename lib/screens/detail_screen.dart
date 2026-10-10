@@ -1,19 +1,22 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../controllers/errand_feed_notifier.dart';
 import 'package:flutter/material.dart';
 import '../models/errand_model.dart';
 import '../services/mock_data_service.dart';
 import '../widgets/primary_button.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends ConsumerStatefulWidget {
   final ErrandModel? errand;
 
   const DetailScreen({super.key, this.errand});
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  ConsumerState<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends ConsumerState<DetailScreen> {
   late ErrandModel _currentErrand;
+  bool _isAccepting = false;
 
   @override
   void initState() {
@@ -21,30 +24,48 @@ class _DetailScreenState extends State<DetailScreen> {
     _currentErrand = widget.errand ?? MockDataService.getInitialErrands().first;
   }
 
-  void _handleAcceptErrand() {
-    setState(() {
-      _currentErrand = _currentErrand.copyWith(status: OrderStatus.accepted);
-    });
+  Future<void> _handleAcceptErrand() async {
+    setState(() => _isAccepting = true);
+    try {
+      await ref
+          .read(errandFeedNotifierProvider.notifier)
+          .acceptErrand(_currentErrand.id);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Berhasil! Anda bersedia membantu mengantarkan "${_currentErrand.item}".',
-                style: const TextStyle(fontWeight: FontWeight.w500),
+      setState(() {
+        _currentErrand = _currentErrand.copyWith(status: OrderStatus.accepted);
+      });
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Berhasil! Anda bersedia membantu mengantarkan "${_currentErrand.item}".',
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          backgroundColor: const Color(0xFF059669),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        backgroundColor: const Color(0xFF059669),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal mengambil titipan: $e'),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isAccepting = false);
+    }
   }
 
   Widget _buildTimelineStep({
@@ -581,6 +602,7 @@ class _DetailScreenState extends State<DetailScreen> {
               icon: status == OrderStatus.open
                   ? Icons.handshake_rounded
                   : (status == OrderStatus.accepted ? Icons.check_circle_rounded : Icons.done_all_rounded),
+              isLoading: _isAccepting,
               color: status == OrderStatus.open
                   ? const Color(0xFF059669)
                   : const Color(0xFF64748B),

@@ -20,7 +20,7 @@ class FadeSlideEntry extends StatefulWidget {
     Key? key,
     required int index,
     required Widget child,
-    int baseDelayMs = 60,
+    int baseDelayMs = 0,
     Duration duration = const Duration(milliseconds: 500),
     Offset slideOffset = const Offset(0, 0.08),
     Curve curve = Curves.easeOutCubic,

@@ -131,6 +131,110 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
     }
   }
 
+  Future<void> _handleCancelErrand(ErrandModel errand) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.cancel_outlined, color: Color(0xFFEF4444)),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Batalkan Pesanan Titipan?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'Apakah Anda yakin ingin membatalkan titipan "${errand.item}"? Pesanan akan dihapus dari feed komuter.',
+            style: const TextStyle(fontSize: 13, color: Color(0xFF475569)),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Kembali', style: TextStyle(color: Color(0xFF64748B))),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: const Text('Batalkan Titipan'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true && mounted) {
+      try {
+        await ref
+            .read(errandFeedNotifierProvider.notifier)
+            .deleteErrand(errand.id);
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Titipan "${errand.item}" berhasil dibatalkan.'),
+            backgroundColor: const Color(0xFF059669),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal membatalkan titipan: $e'),
+            backgroundColor: const Color(0xFFDC2626),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  Widget _buildRequesterCancelButton(ErrandModel errand) {
+    if (errand.status != OrderStatus.open) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 6),
+      child: OutlinedButton.icon(
+        onPressed: () => _handleCancelErrand(errand),
+        icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Color(0xFFEF4444)),
+        label: const Text(
+          'Batalkan Titipan Ini',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFEF4444),
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFFFCA5A5)),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildStatusFilterChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -340,7 +444,12 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildTrackingBanner(errand),
+                    child: Column(
+                      children: [
+                        _buildTrackingBanner(errand),
+                        _buildRequesterCancelButton(errand),
+                      ],
+                    ),
                   ),
                 ],
               ),
