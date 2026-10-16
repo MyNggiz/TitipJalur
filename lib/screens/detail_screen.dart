@@ -292,11 +292,14 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                                   color: Color(0xFF64748B),
                                 ),
                                 const SizedBox(width: 4),
-                                Text(
-                                  '${errand.distanceKm} km dari posisi rute',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFF64748B),
+                                Expanded(
+                                  child: Text(
+                                    '${errand.distanceKm} km dari posisi rute',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF64748B),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -321,23 +324,28 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
-                          children: [
-                            Icon(
-                              Icons.monetization_on_rounded,
-                              color: Color(0xFF059669),
-                              size: 20,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              'Tip Imbalan Komuter',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF065F46),
+                        const Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.monetization_on_rounded,
+                                color: Color(0xFF059669),
+                                size: 20,
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  'Tip Imbalan Komuter',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF065F46),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Text(
                           errand.formattedTip,
@@ -553,11 +561,14 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                         color: Color(0xFF059669),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        'Status Progres Titipan',
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF1E293B),
+                      Expanded(
+                        child: Text(
+                          'Status Progres Titipan',
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF1E293B),
+                          ),
                         ),
                       ),
                     ],

@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_riverpod: ^2.5.1
   shared_preferences: ^2.2.3
-
+  http: ^1.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -354,12 +354,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         color: Color(0xFF059669),
                       ),
                       const SizedBox(width: 6),
-                      const Text(
-                        'Radius Pengantaran:',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF1E293B),
+                      const Flexible(
+                        child: Text(
+                          'Radius Pengantaran:',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1E293B),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
