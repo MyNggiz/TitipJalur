@@ -75,6 +75,25 @@ Untuk memastikan kualitas arsitektur dan penyelesaian tepat waktu dalam 12 perte
 ## 🎯 Kriteria Keberhasilan Aplikasi
 
 1. **Build & Instalasi Fisik:** File APK berhasil dicompile dalam mode release dan berfungsi stabil saat diinstal pada perangkat Android fisik nyata (bukan hanya emulator).
-2. **Vertical Slice Mulus:** Siklus hidup transaksi bekerja sempurna dari pembuatan pesanan berbasis AI parser, penemuan oleh runner, hingga konfirmasi foto serah terima (*Proof of Delivery*).
-3. **Resiliensi Jaringan (*Graceful Degradation*):** Aplikasi tidak mengalami *crash* saat terjadi kegagalan jaringan internet dan mampu menyajikan indikator offline yang ramah pengguna.
+2. **Vertical Slice Mulus:** Siklus hidup transaksi bekerja sempurna dari pembuatan pesanan berbasis AI parser, penemuan oleh runner, hingga konfirmasi serah terima.
+3. **Resiliensi Jaringan (*Graceful Degradation*):** Aplikasi tidak mengalami *crash* saat terjadi kegagalan jaringan internet dan mampu menyajikan indikator offline yang ramah pengguna dengan caching lokal disk.
 4. **Kepatuhan Standar Akademik:** Memenuhi seluruh indikator rubrik penilaian Dr. Haryono, meliputi integritas arsitektur kode, kebersihan kode sumber, dan kematangan user experience (UX).
+
+---
+
+## 📚 Dokumentasi Tugas & Panduan Review Per Pertemuan
+
+- **Pertemuan 05 (P5) - MVP v1:** [`P5/README.md`](P5/README.md) (Persistensi CRUD Lokal, Filter Radius Komuter, Alur Dua-Sisi).
+- **Pertemuan 06 (P6) - Penyempurnaan MVP:** [`P6/README.md`](P6/README.md) (Integrasi API Vertical Slice, 5 User Stories, 5 Berkas Unit Test Bisnis, 100% All Passed).
+
+### Cara Menjalankan Pengujian & Analisis Kode
+```bash
+# 1. Menjalankan 5 berkas Unit Test P6 (Aturan Bisnis & Kontrak API)
+flutter test test/unit/
+
+# 2. Menjalankan seluruh test suite proyek (84/84 tests)
+flutter test
+
+# 3. Analisis statis kualitas kode
+flutter analyze
+```
