@@ -81,7 +81,44 @@ Berikut adalah 5 User Story MVP yang diimplementasikan secara utuh dengan kriter
 
 ---
 
-## 3. Matriks 5 File Unit Test Bisnis Proyek
+## 3. Katalog Bukti Screenshot Nyata MVP P6 (Resolusi FHD+ 1080 × 2400)
+
+Seluruh tangkapan layar di bawah ini dirender langsung dari komponen Flutter nyata pada resolusi ponsel fisik modern **FHD+ (1080 × 2400 piksel)** menggunakan tipografi TrueType **Roboto**, ikon **MaterialIcons**, dan tema Material 3 TitipJalur di direktori `P6/screenshots/`:
+
+| No | Nama Layar & Fitur | Berkas Screenshot | Resolusi | Penjelasan Visual & Perilaku Teknis |
+|:--:|:---|:---|:---:|:---|
+| **1** | **State 1: Loading State (Vertical Slice)** | [`screenshots/01_p6_state_loading.png`](screenshots/01_p6_state_loading.png) | 1080 × 2400 | Indikator proses `AsyncValue.loading()` saat aplikasi pertama kali melakukan handshake dan sinkronisasi data dari endpoint REST API `/v1/errands`. Mencegah aplikasi tampak macet (*freezing*). |
+| **2** | **State 2: Success State (Feed Data API)** | [`screenshots/02_p6_state_success_feed.png`](screenshots/02_p6_state_success_feed.png) | 1080 × 2400 | Tampilan feed pesanan publik yang sukses dimuat dari backend API. Menampilkan kartu titipan lengkap dengan badge kategori (*Kantin, ATK, Kafe*), nominal tip komuter Rupiah, rute penjemputan/tujuan, dan jarak komuter. |
+| **3** | **State 3: Empty State (Tanpa Order Aktif)** | [`screenshots/03_p6_state_empty.png`](screenshots/03_p6_state_empty.png) | 1080 × 2400 | Indikator ramah ketika array JSON dari backend API mengembalikan list kosong `[]`. Menampilkan ilustrasi dan pesan informatif bahwa belum ada titipan aktif di sekitar rute pengguna. |
+| **4** | **State 4: Error State & Tombol Retry** | [`screenshots/04_p6_state_error_retry.png`](screenshots/04_p6_state_error_retry.png) | 1080 × 2400 | Tampilan kegagalan jaringan saat backend offline (HTTP 500/503 atau Timeout). Menyajikan pesan kesalahan deskriptif dan tombol interaktif **"Coba Lagi"** yang mengeksekusi `notifier.retry()`. |
+| **5** | **Fitur 3: Form Buat Titipan (POST API)** | [`screenshots/05_p6_vertical_slice_create.png`](screenshots/05_p6_vertical_slice_create.png) | 1080 × 2400 | Formulir pembuatan titipan dengan validasi aturan bisnis ketat (nama barang $\ge 3$ karakter, rute pickup/dropoff fisik, batas tip minimal Rp 2.000, serta shortcut tip +Rp 2rb / +Rp 5rb) sebelum dikirimkan via HTTP POST. |
+| **6** | **Fitur 4: Detail Order & Aksi Klaim Runner** | [`screenshots/06_p6_detail_order_claim.png`](screenshots/06_p6_detail_order_claim.png) | 1080 × 2400 | Layar rincian titipan, banner imbalan tip komuter, timeline status 3 tahap (*Open $\rightarrow$ Accepted $\rightarrow$ Completed*), dan tombol aksi hijau **"Bantu Teman (Ambil Titipan Ini)"** yang memicu PATCH klaim order. |
+
+---
+
+## 4. Galeri Pratinjau Tangkapan Layar FHD+ (1080 × 2400)
+
+### 1. State 1: Loading State (Proses Sinkronisasi API)
+![01 State Loading](screenshots/01_p6_state_loading.png)
+
+### 2. State 2: Success State (Feed Titipan Aktif dari API)
+![02 State Success](screenshots/02_p6_state_success_feed.png)
+
+### 3. State 3: Empty State (Kondisi Belum Ada Titipan Aktif)
+![03 State Empty](screenshots/03_p6_state_empty.png)
+
+### 4. State 4: Error State dengan Tombol Coba Lagi (Retry)
+![04 State Error Retry](screenshots/04_p6_state_error_retry.png)
+
+### 5. Fitur 3: Formulir Buat Titipan dengan Validasi Aturan Bisnis
+![05 Form Create](screenshots/05_p6_vertical_slice_create.png)
+
+### 6. Fitur 4: Rincian Detail Titipan & Tombol Klaim Runner
+![06 Detail Order Claim](screenshots/06_p6_detail_order_claim.png)
+
+---
+
+## 5. Matriks 5 File Unit Test Bisnis Proyek
 
 Untuk memenuhi instruksi tugas P6, telah dibuat **5 file unit test independen** di direktori `test/unit/` yang mencakup **45 test case** aturan bisnis:
 
@@ -95,9 +132,9 @@ Untuk memenuhi instruksi tugas P6, telah dibuat **5 file unit test independen** 
 
 ---
 
-## 4. Hasil Eksekusi Pengujian (Wajib All Passed)
+## 6. Hasil Eksekusi Pengujian (Wajib All Passed)
 
-### 4.1 Eksekusi Seluruh Unit Test P6 (`test/unit/`)
+### 6.1 Eksekusi Seluruh Unit Test P6 (`test/unit/`)
 ```bash
 flutter test test/unit/
 ```
@@ -108,7 +145,7 @@ flutter test test/unit/
 00:00 +46: All tests passed!
 ```
 
-### 4.2 Eksekusi Seluruh Test Suite Repositori (P3, P4, P5, P6, Screenshots)
+### 6.2 Eksekusi Seluruh Test Suite Repositori (P3, P4, P5, P6, Screenshots)
 ```bash
 flutter test
 ```
@@ -118,7 +155,7 @@ flutter test
 ```
 **Total:** **84 dari 84 pengujian berhasil lulus 100%** tanpa kegagalan satupun.
 
-### 4.3 Analisis Statis Kode (`flutter analyze`)
+### 6.3 Analisis Statis Kode (`flutter analyze`)
 ```bash
 flutter analyze
 ```
@@ -130,7 +167,7 @@ No issues found! (ran in 10.1s)
 
 ---
 
-## 5. Bukti Riwayat Git Commit (Minimal 2 Commit)
+## 7. Bukti Riwayat Git Commit (Minimal 2 Commit)
 
 Sesuai instruksi tugas, pekerjaan dipisahkan ke dalam commit yang bersih dan bermakna:
 
@@ -146,7 +183,7 @@ Sesuai instruksi tugas, pekerjaan dipisahkan ke dalam commit yang bersih dan ber
 
 ---
 
-## 6. Jawaban Pertanyaan Review Evaluasi Dosen
+## 8. Jawaban Pertanyaan Review Evaluasi Dosen
 
 ### Review 1: MVP nya apa?
 > **Jawaban:**  
