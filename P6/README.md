@@ -172,15 +172,14 @@ No issues found! (ran in 10.1s)
 Sesuai instruksi tugas, pekerjaan dipisahkan ke dalam commit yang bersih dan bermakna:
 
 1. **Commit 1 (MVP Production Code):**  
-   - **Hash:** `2883580`  
+   - **Hash:** `b638e52`  
    - **Pesan:** `feat(p6-mvp): implement vertical slice API integration and core business rules for 5 user stories`  
    - **Perubahan:** Penambahan `http: ^1.2.0`, implementasi `ErrandModel.fromJson/toJson` kontrak ketat, service `ErrandApiService`, validator domain `ErrandBusinessValidator`, pembaruan repositori hibrida `ErrandRepositoryImpl`, dan perbaikan *overflow* layout UI.
 
 2. **Commit 2 (MVP Unit Test):**  
-   - **Hash:** `c0456cf`  
+   - **Hash:** `21b9a01`  
    - **Pesan:** `test(p6-mvp): add comprehensive unit test suite covering 5 user stories and business rules`  
    - **Perubahan:** Penambahan 5 berkas unit test lengkap di `test/unit/` (45 skenario pengujian bisnis) yang memverifikasi model, API service, validator bisnis, repository, dan Riverpod state notifier.
-
 ---
 
 ## 8. Jawaban Pertanyaan Review Evaluasi Dosen
