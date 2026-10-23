@@ -601,8 +601,68 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                 ],
               ),
             ),
+            if (errand.proofOfDeliveryPath != null) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0FDF4),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFF86EFAC)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF059669).withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt_rounded,
+                        color: Color(0xFF059669),
+                        size: 22,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Bukti Serah Terima (Proof of Delivery)',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF065F46),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Foto bukti: ${errand.proofOfDeliveryPath!.split(RegExp(r"[/\\]")).last}',
+                            style: const TextStyle(
+                              fontSize: 11.5,
+                              color: Color(0xFF047857),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          const Text(
+                            'Status: Terverifikasi oleh Kamera Perangkat',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF059669),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 28),
-
             // Action Button
             PrimaryButton(
               label: status == OrderStatus.open

@@ -258,6 +258,50 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
                 hint: 'Minimal 3 karakter (misal: Kantin Utama FMIPA Lt. 1)',
                 controller: _pickupController,
                 prefixIcon: Icons.storefront_outlined,
+                suffixIcon: IconButton(
+                  tooltip: 'Gunakan Koordinat GPS Kampus',
+                  icon: const Icon(
+                    Icons.my_location_rounded,
+                    color: Color(0xFF059669),
+                    size: 20,
+                  ),
+                  onPressed: formState.isSubmitting
+                      ? null
+                      : () async {
+                          try {
+                            final coords = await ref
+                                .read(geoLocationServiceProvider)
+                                .getCurrentLocation();
+                            final locationStr =
+                                'Kantin Kampus UNESA (${coords.latitude.toStringAsFixed(4)}, ${coords.longitude.toStringAsFixed(4)})';
+                            _pickupController.text = locationStr;
+                            formNotifier.setPickup(locationStr);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Titik koordinat GPS berhasil disematkan ke formulir!',
+                                  ),
+                                  backgroundColor: Color(0xFF059669),
+                                  duration: Duration(seconds: 2),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Lokasi GPS: $e'),
+                                  backgroundColor: const Color(0xFFDC2626),
+                                  duration: const Duration(seconds: 3),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                ),
                 errorText: formState.pickupError,
                 enabled: !formState.isSubmitting,
                 onChanged: formNotifier.setPickup,

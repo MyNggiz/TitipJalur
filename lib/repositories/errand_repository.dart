@@ -1,10 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../models/errand_model.dart';
+import '../services/app_notification_service.dart';
 import '../services/errand_api_service.dart';
 import '../services/errand_business_validator.dart';
 import '../services/errand_local_storage_service.dart';
+import '../services/geo_location_service.dart';
 import '../services/mock_data_service.dart';
+import '../services/pod_camera_service.dart';
 abstract class ErrandRepository {
   Future<List<ErrandModel>> getErrands({
     bool simulateError = false,
@@ -16,10 +19,9 @@ abstract class ErrandRepository {
     bool simulateError = false,
   });
 
-  Future<ErrandModel> acceptErrand(String id);
+  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'});
 
-  Future<ErrandModel> completeErrand(String id);
-
+  Future<ErrandModel> completeErrand(String id, {String? proofOfDeliveryPath});
   Future<void> deleteErrand(String id);
 }
 
@@ -28,14 +30,17 @@ class ErrandRepositoryImpl implements ErrandRepository {
     List<ErrandModel>? initialErrands,
     ErrandLocalStorageService? localStorageService,
     ErrandApiService? apiService,
+    IAppNotificationService? notificationService,
   })  : _localStorageService = localStorageService,
         _apiService = apiService,
+        _notificationService = notificationService,
         _errands = List<ErrandModel>.from(
           initialErrands ?? MockDataService.getInitialErrands(),
         );
 
   final ErrandLocalStorageService? _localStorageService;
   final ErrandApiService? _apiService;
+  final IAppNotificationService? _notificationService;
   List<ErrandModel> _errands;
   bool _isLoadedFromStorage = false;
   @override
@@ -112,6 +117,10 @@ class ErrandRepositoryImpl implements ErrandRepository {
 
     _errands.insert(0, created);
     await _localStorageService?.saveErrands(_errands);
+    await _notificationService?.showOrderCreatedNotification(
+      item: created.item,
+      tip: created.tip,
+    );
     return created;
   }
 
@@ -137,11 +146,18 @@ class ErrandRepositoryImpl implements ErrandRepository {
 
     _errands[index] = updated;
     await _localStorageService?.saveErrands(_errands);
+    await _notificationService?.showOrderAcceptedNotification(
+      item: updated.item,
+      runnerName: runnerName,
+    );
     return updated;
   }
 
   @override
-  Future<ErrandModel> completeErrand(String id) async {
+  Future<ErrandModel> completeErrand(
+    String id, {
+    String? proofOfDeliveryPath,
+  }) async {
     final index = _errands.indexWhere((element) => element.id == id);
     if (index == -1) {
       throw Exception('Titipan dengan ID $id tidak ditemukan.');
@@ -150,18 +166,27 @@ class ErrandRepositoryImpl implements ErrandRepository {
     final current = _errands[index];
     ErrandBusinessValidator.validateComplete(current);
 
-    ErrandModel updated = current.copyWith(status: OrderStatus.completed);
+    ErrandModel updated = current.copyWith(
+      status: OrderStatus.completed,
+      proofOfDeliveryPath: proofOfDeliveryPath ?? current.proofOfDeliveryPath,
+    );
     if (_apiService != null) {
       updated = await _apiService!.completeErrand(id);
+      if (proofOfDeliveryPath != null) {
+        updated = updated.copyWith(proofOfDeliveryPath: proofOfDeliveryPath);
+      }
     } else {
       await Future<void>.delayed(const Duration(milliseconds: 10));
     }
 
     _errands[index] = updated;
     await _localStorageService?.saveErrands(_errands);
+    await _notificationService?.showOrderCompletedNotification(
+      item: updated.item,
+      hasProofOfDelivery: updated.proofOfDeliveryPath != null,
+    );
     return updated;
   }
-
   @override
   Future<void> deleteErrand(String id) async {
     final index = _errands.indexWhere((element) => element.id == id);
@@ -187,6 +212,7 @@ final errandLocalStorageServiceProvider =
     Provider<ErrandLocalStorageService>((ref) {
   return ErrandLocalStorageService();
 });
+
 final errandApiServiceProvider = Provider<ErrandApiService>((ref) {
   return ErrandApiService(
     client: http.Client(),
@@ -194,7 +220,23 @@ final errandApiServiceProvider = Provider<ErrandApiService>((ref) {
   );
 });
 
+final podCameraServiceProvider = Provider<IPodCameraService>((ref) {
+  return PodCameraService();
+});
+
+final geoLocationServiceProvider = Provider<IGeoLocationService>((ref) {
+  return GeoLocationService();
+});
+
+final appNotificationServiceProvider = Provider<IAppNotificationService>((ref) {
+  return AppNotificationService();
+});
+
 final errandRepositoryProvider = Provider<ErrandRepository>((ref) {
   final storage = ref.watch(errandLocalStorageServiceProvider);
-  return ErrandRepositoryImpl(localStorageService: storage);
+  final notifications = ref.watch(appNotificationServiceProvider);
+  return ErrandRepositoryImpl(
+    localStorageService: storage,
+    notificationService: notifications,
+  );
 });

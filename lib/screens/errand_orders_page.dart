@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../controllers/errand_feed_notifier.dart';
 import '../models/errand_model.dart';
+import '../repositories/errand_repository.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
-import '../widgets/responsive_container.dart';
 import '../widgets/errand_card.dart';
 import '../widgets/fade_slide_entry.dart';
+import '../widgets/responsive_container.dart';
 import '../widgets/state_view.dart';
 enum StatusFilter {
   all('Semua', null),
@@ -51,54 +53,178 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
   }
 
   Future<void> _handleCompleteErrand(ErrandModel errand) async {
+    String? selectedPhotoPath;
+    String? permissionError;
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Row(
-            children: [
-              Icon(Icons.check_circle_outline, color: Color(0xFF059669)),
-              SizedBox(width: 8),
-              Text(
-                'Selesaikan Tugas?',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F172A),
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Row(
+                children: [
+                  Icon(Icons.check_circle_outline, color: Color(0xFF059669)),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Selesaikan Tugas?',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0F172A),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Apakah Anda yakin telah menyelesaikan pembelian dan pengantaran untuk "${errand.item}"?',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF475569),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Bukti Foto Serah Terima (Kamera POD):',
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    if (permissionError != null)
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEE2E2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          permissionError!,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFFDC2626),
+                          ),
+                        ),
+                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              try {
+                                final path = await ref
+                                    .read(podCameraServiceProvider)
+                                    .captureProofOfDelivery(
+                                      source: ImageSource.camera,
+                                    );
+                                setDialogState(() {
+                                  selectedPhotoPath = path;
+                                  permissionError = null;
+                                });
+                              } catch (e) {
+                                setDialogState(() {
+                                  permissionError = e.toString();
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.camera_alt_outlined, size: 16),
+                            label: const Text('Kamera', style: TextStyle(fontSize: 12)),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              try {
+                                final path = await ref
+                                    .read(podCameraServiceProvider)
+                                    .captureProofOfDelivery(
+                                      source: ImageSource.gallery,
+                                    );
+                                setDialogState(() {
+                                  selectedPhotoPath = path;
+                                  permissionError = null;
+                                });
+                              } catch (e) {
+                                setDialogState(() {
+                                  permissionError = e.toString();
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.photo_library_outlined, size: 16),
+                            label: const Text('Galeri', style: TextStyle(fontSize: 12)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (selectedPhotoPath != null) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFECFDF5),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color(0xFF059669).withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle_rounded, color: Color(0xFF059669), size: 16),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                'Foto bukti terlampir: ${selectedPhotoPath!.split(RegExp(r"[/\\]")).last}',
+                                style: const TextStyle(
+                                  fontSize: 11.5,
+                                  color: Color(0xFF065F46),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-            ],
-          ),
-          content: Text(
-            'Apakah Anda yakin telah menyelesaikan pembelian dan pengantaran untuk "${errand.item}"?',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF475569),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text(
-                'Batal',
-                style: TextStyle(color: Color(0xFF64748B)),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF059669),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: const Text(
+                    'Batal',
+                    style: TextStyle(color: Color(0xFF64748B)),
+                  ),
                 ),
-              ),
-              child: const Text('Ya, Selesaikan'),
-            ),
-          ],
+                ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF059669),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Ya, Selesaikan'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -107,11 +233,18 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
       try {
         await ref
             .read(errandFeedNotifierProvider.notifier)
-            .completeErrand(errand.id);
+            .completeErrand(
+              errand.id,
+              proofOfDeliveryPath: selectedPhotoPath,
+            );
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Tugas "${errand.item}" berhasil diselesaikan!'),
+              content: Text(
+                selectedPhotoPath != null
+                    ? 'Tugas "${errand.item}" diselesaikan dengan bukti foto POD!'
+                    : 'Tugas "${errand.item}" berhasil diselesaikan!',
+              ),
               backgroundColor: const Color(0xFF059669),
               behavior: SnackBarBehavior.floating,
             ),
@@ -130,6 +263,7 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
       }
     }
   }
+
 
   Future<void> _handleCancelErrand(ErrandModel errand) async {
     final confirmed = await showDialog<bool>(

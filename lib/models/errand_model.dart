@@ -49,6 +49,9 @@ class ErrandModel {
   final OrderStatus status;
   final double distanceKm;
   final String category;
+  final String? proofOfDeliveryPath;
+  final double? latitude;
+  final double? longitude;
 
   const ErrandModel({
     required this.id,
@@ -60,8 +63,10 @@ class ErrandModel {
     this.status = OrderStatus.open,
     this.distanceKm = 1.0,
     this.category = 'Kantin',
+    this.proofOfDeliveryPath,
+    this.latitude,
+    this.longitude,
   });
-
   String get formattedTip {
     if (tip <= 0) return 'Rp 0';
     final tipStr = tip.toString();
@@ -85,6 +90,9 @@ class ErrandModel {
     OrderStatus? status,
     double? distanceKm,
     String? category,
+    String? proofOfDeliveryPath,
+    double? latitude,
+    double? longitude,
   }) {
     return ErrandModel(
       id: id ?? this.id,
@@ -96,6 +104,9 @@ class ErrandModel {
       status: status ?? this.status,
       distanceKm: distanceKm ?? this.distanceKm,
       category: category ?? this.category,
+      proofOfDeliveryPath: proofOfDeliveryPath ?? this.proofOfDeliveryPath,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
@@ -110,6 +121,9 @@ class ErrandModel {
       'status': status.name,
       'distanceKm': distanceKm,
       'category': category,
+      if (proofOfDeliveryPath != null) 'proofOfDeliveryPath': proofOfDeliveryPath,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
     };
   }
 
@@ -201,6 +215,10 @@ class ErrandModel {
         ? categoryStr
         : 'Kantin';
 
+    final podPath = json['proofOfDeliveryPath'] as String?;
+    final lat = (json['latitude'] as num?)?.toDouble();
+    final lng = (json['longitude'] as num?)?.toDouble();
+
     return ErrandModel(
       id: idStr,
       item: itemStr,
@@ -211,9 +229,11 @@ class ErrandModel {
       status: parsedStatus,
       distanceKm: parsedDistance,
       category: parsedCategory,
+      proofOfDeliveryPath: podPath,
+      latitude: lat,
+      longitude: lng,
     );
   }
-
   factory ErrandModel.fromMap(Map<String, dynamic> map) {
     try {
       return ErrandModel.fromJson(map);
@@ -239,13 +259,16 @@ class ErrandModel {
         status: parsedStatus,
         distanceKm: (map['distanceKm'] as num?)?.toDouble() ?? 0.0,
         category: map['category'] as String? ?? 'Umum',
+        proofOfDeliveryPath: map['proofOfDeliveryPath'] as String?,
+        latitude: (map['latitude'] as num?)?.toDouble(),
+        longitude: (map['longitude'] as num?)?.toDouble(),
       );
     }
   }
 
   @override
   String toString() {
-    return 'ErrandModel(id: $id, item: $item, pickup: $pickup, dropoff: $dropoff, tip: $tip, requester: $requester, status: $status, distanceKm: $distanceKm, category: $category)';
+    return 'ErrandModel(id: $id, item: $item, pickup: $pickup, dropoff: $dropoff, tip: $tip, requester: $requester, status: $status, distanceKm: $distanceKm, category: $category, proofOfDeliveryPath: $proofOfDeliveryPath, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -260,7 +283,10 @@ class ErrandModel {
         other.requester == requester &&
         other.status == status &&
         other.distanceKm == distanceKm &&
-        other.category == category;
+        other.category == category &&
+        other.proofOfDeliveryPath == proofOfDeliveryPath &&
+        other.latitude == latitude &&
+        other.longitude == longitude;
   }
 
   @override
@@ -273,6 +299,9 @@ class ErrandModel {
         requester.hashCode ^
         status.hashCode ^
         distanceKm.hashCode ^
-        category.hashCode;
+        category.hashCode ^
+        proofOfDeliveryPath.hashCode ^
+        latitude.hashCode ^
+        longitude.hashCode;
   }
 }

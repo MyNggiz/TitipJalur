@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../widgets/primary_button.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   void _handleLogout(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -241,6 +247,128 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
+            // Advanced Feature: Role Switcher Card (Requester vs Runner)
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF0F172A).withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.switch_account_rounded,
+                        color: Color(0xFF059669),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Mode & Peran Akun',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF1E293B),
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFECFDF5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          userRole,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF059669),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Ganti peran untuk mengakses aksi khusus pemohon titipan atau penolong komuter:',
+                    style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                  ),
+                  const SizedBox(height: 14),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ChoiceChip(
+                          label: const Text('Mode Pemohon'),
+                          selected: userRole != 'Runner',
+                          selectedColor: const Color(0xFF059669),
+                          backgroundColor: const Color(0xFFF1F5F9),
+                          labelStyle: TextStyle(
+                            color: userRole != 'Runner' ? Colors.white : const Color(0xFF475569),
+                            fontWeight: userRole != 'Runner' ? FontWeight.w700 : FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                          onSelected: (selected) async {
+                            if (selected) {
+                              await AuthService.instance.switchRole('Mahasiswa');
+                              setState(() {});
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Beralih ke Mode Pemohon (Requester)!'),
+                                    backgroundColor: Color(0xFF059669),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ChoiceChip(
+                          label: const Text('Mode Komuter'),
+                          selected: userRole == 'Runner',
+                          selectedColor: const Color(0xFF059669),
+                          backgroundColor: const Color(0xFFF1F5F9),
+                          labelStyle: TextStyle(
+                            color: userRole == 'Runner' ? Colors.white : const Color(0xFF475569),
+                            fontWeight: userRole == 'Runner' ? FontWeight.w700 : FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                          onSelected: (selected) async {
+                            if (selected) {
+                              await AuthService.instance.switchRole('Runner');
+                              setState(() {});
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Beralih ke Mode Komuter (Runner)!'),
+                                    backgroundColor: Color(0xFF059669),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             // Statistics Row
             Row(
               children: [

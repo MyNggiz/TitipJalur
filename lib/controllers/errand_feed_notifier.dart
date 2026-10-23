@@ -47,9 +47,12 @@ class ErrandFeedNotifier extends StateNotifier<AsyncValue<List<ErrandModel>>> {
     }
   }
 
-  Future<void> completeErrand(String id) async {
+  Future<void> completeErrand(String id, {String? proofOfDeliveryPath}) async {
     try {
-      final updated = await _repository.completeErrand(id);
+      final updated = await _repository.completeErrand(
+        id,
+        proofOfDeliveryPath: proofOfDeliveryPath,
+      );
       final current = state.valueOrNull;
       if (current != null) {
         state = AsyncValue.data(
