@@ -85,15 +85,14 @@ Untuk memastikan kualitas arsitektur dan penyelesaian tepat waktu dalam 12 perte
 
 - **Pertemuan 05 (P5) - MVP v1:** [`P5/README.md`](P5/README.md) (Persistensi CRUD Lokal, Filter Radius Komuter, Alur Dua-Sisi).
 - **Pertemuan 06 (P6) - Penyempurnaan MVP:** [`P6/README.md`](P6/README.md) (Integrasi API Vertical Slice, 5 User Stories, 5 Berkas Unit Test Bisnis, 100% All Passed).
-
+- **Pertemuan 07 (P7) - MVP Lengkap & Advanced Features:** [`P7/README.md`](P7/README.md) (3+ Fitur Lanjutan: Autentikasi Role Switcher, Kamera Proof of Delivery, Lokasi GPS Haversine, & Notifikasi Sistem).
 ### Cara Menjalankan Pengujian & Analisis Kode
 ```bash
 # 1. Menjalankan 5 berkas Unit Test P6 (Aturan Bisnis & Kontrak API)
 flutter test test/unit/
 
-# 2. Menjalankan seluruh test suite proyek (84/84 tests)
+# 2. Menjalankan seluruh test suite proyek (112/112 tests)
 flutter test
-
 # 3. Analisis statis kualitas kode
 flutter analyze
 ```
