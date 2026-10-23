@@ -40,7 +40,7 @@ class FakeErrandRepository implements ErrandRepository {
   }
 
   @override
-  Future<ErrandModel> acceptErrand(String id) async {
+  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'}) async {
     if (shouldThrowError) {
       throw Exception('Gagal klaim');
     }
@@ -52,13 +52,16 @@ class FakeErrandRepository implements ErrandRepository {
   }
 
   @override
-  Future<ErrandModel> completeErrand(String id) async {
+  Future<ErrandModel> completeErrand(String id, {String? proofOfDeliveryPath}) async {
     if (shouldThrowError) {
       throw Exception('Gagal menyelesaikan');
     }
     final index = errands.indexWhere((e) => e.id == id);
     if (index == -1) throw Exception('Not found');
-    final updated = errands[index].copyWith(status: OrderStatus.completed);
+    final updated = errands[index].copyWith(
+      status: OrderStatus.completed,
+      proofOfDeliveryPath: proofOfDeliveryPath,
+    );
     errands[index] = updated;
     return updated;
   }

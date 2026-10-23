@@ -51,7 +51,7 @@ class MockErrandRepository implements ErrandRepository {
   }
 
   @override
-  Future<ErrandModel> acceptErrand(String id) async {
+  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'}) async {
     final index = items.indexWhere((e) => e.id == id);
     if (index != -1) {
       final updated = items[index].copyWith(status: OrderStatus.accepted);
@@ -60,17 +60,20 @@ class MockErrandRepository implements ErrandRepository {
     }
     throw Exception('Order tidak ditemukan');
   }
+
   @override
-  Future<ErrandModel> completeErrand(String id) async {
+  Future<ErrandModel> completeErrand(String id, {String? proofOfDeliveryPath}) async {
     final index = items.indexWhere((e) => e.id == id);
     if (index != -1) {
-      final updated = items[index].copyWith(status: OrderStatus.completed);
+      final updated = items[index].copyWith(
+        status: OrderStatus.completed,
+        proofOfDeliveryPath: proofOfDeliveryPath,
+      );
       items[index] = updated;
       return updated;
     }
     throw Exception('Order tidak ditemukan');
   }
-
   @override
   Future<void> deleteErrand(String id) async {
     items.removeWhere((e) => e.id == id);
@@ -343,8 +346,7 @@ class _CustomFeedNotifier
   @override
   Future<void> retry() async {}
   @override
-  Future<void> completeErrand(String id) async {}
-
+  Future<void> completeErrand(String id, {String? proofOfDeliveryPath}) async {}
   @override
   Future<void> deleteErrand(String id) async {}
 }

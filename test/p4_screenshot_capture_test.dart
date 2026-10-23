@@ -21,12 +21,11 @@ class _MockFeedNotifier extends StateNotifier<AsyncValue<List<ErrandModel>>>
   void addErrand(ErrandModel errand) {}
 
   @override
-  Future<void> acceptErrand(String id) async {}
+  Future<void> acceptErrand(String id, {String runnerName = 'Runner'}) async {}
   @override
-  Future<void> completeErrand(String id) async {}
+  Future<void> completeErrand(String id, {String? proofOfDeliveryPath}) async {}
   @override
   Future<void> deleteErrand(String id) async {}
-
 
   @override
   Future<void> loadErrands(
