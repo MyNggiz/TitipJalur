@@ -13,6 +13,8 @@ import 'package:titip_jalur/screens/dashboard_screen.dart';
 import 'package:titip_jalur/screens/detail_screen.dart';
 import 'package:titip_jalur/screens/errand_orders_page.dart';
 import 'package:titip_jalur/screens/profile_screen.dart';
+import 'package:titip_jalur/screens/login_screen.dart';
+import 'package:titip_jalur/screens/homepage_screen.dart';
 import 'package:titip_jalur/services/auth_service.dart';
 import 'package:titip_jalur/services/pod_camera_service.dart';
 import 'font_loader_helper.dart';
@@ -102,6 +104,60 @@ void main() {
   ];
 
   group('P7 Advanced Features FHD+ Mobile Screenshots (1080x2400)', () {
+    testWidgets('0. Login Screen dengan Akses Tamu Kampus', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.625;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        ProviderScope(
+          child: _buildScreenInRepaintBoundary(
+            const LoginScreen(),
+            key,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _captureHighResPhoneScreenshot(
+        tester,
+        key,
+        '00_p7_login_screen.png',
+      );
+    });
+
+    testWidgets('0. Homepage Screen dengan Tutorial dan Live Stats', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.625;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      SharedPreferences.setMockInitialValues({});
+      final repository = ErrandRepositoryImpl(initialErrands: sampleErrands);
+      final feedNotifier = ErrandFeedNotifier(repository);
+      final key = GlobalKey();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            errandRepositoryProvider.overrideWithValue(repository),
+            errandFeedNotifierProvider.overrideWith((ref) => feedNotifier),
+          ],
+          child: _buildScreenInRepaintBoundary(
+            const HomepageScreen(),
+            key,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _captureHighResPhoneScreenshot(
+        tester,
+        key,
+        '00_p7_homepage_screen.png',
+      );
+    });
+
     testWidgets('1. Fitur 1: Autentikasi & Multi-Sided Role Switcher (Requester vs Runner)',
         (tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
