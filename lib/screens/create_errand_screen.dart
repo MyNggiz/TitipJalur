@@ -6,6 +6,7 @@ import '../repositories/errand_repository.dart';
 import '../services/auth_service.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
+import '../widgets/responsive_container.dart';
 
 class CreateErrandScreen extends ConsumerStatefulWidget {
   const CreateErrandScreen({super.key});
@@ -130,6 +131,7 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text(
           'Buat Titipan Baru',
@@ -140,7 +142,7 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: 'Reset Form',
+            tooltip: 'Reset Formulir',
             icon: const Icon(Icons.refresh_rounded),
             onPressed: formState.isSubmitting
                 ? null
@@ -157,11 +159,14 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: ResponsiveContainer(
+          maxWidth: 760,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               // Info Card
               Container(
                 padding: const EdgeInsets.all(14),
@@ -246,80 +251,105 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
                 hint: 'Minimal 3 karakter (misal: Nasi Padang Rendang)',
                 controller: _itemController,
                 prefixIcon: Icons.shopping_bag_outlined,
+                textInputAction: TextInputAction.next,
                 errorText: formState.itemError,
                 enabled: !formState.isSubmitting,
                 onChanged: formNotifier.setItem,
               ),
               const SizedBox(height: 16),
 
-              // Pickup Location
-              AppTextField(
-                label: 'Lokasi Pengambilan (Pickup)',
-                hint: 'Minimal 3 karakter (misal: Kantin Utama FMIPA Lt. 1)',
-                controller: _pickupController,
-                prefixIcon: Icons.storefront_outlined,
-                suffixIcon: IconButton(
-                  tooltip: 'Gunakan Koordinat GPS Kampus',
-                  icon: const Icon(
-                    Icons.my_location_rounded,
-                    color: Color(0xFF059669),
-                    size: 20,
-                  ),
-                  onPressed: formState.isSubmitting
-                      ? null
-                      : () async {
-                          try {
-                            final coords = await ref
-                                .read(geoLocationServiceProvider)
-                                .getCurrentLocation();
-                            final locationStr =
-                                'Kantin Kampus UNESA (${coords.latitude.toStringAsFixed(4)}, ${coords.longitude.toStringAsFixed(4)})';
-                            _pickupController.text = locationStr;
-                            formNotifier.setPickup(locationStr);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Titik koordinat GPS berhasil disematkan ke formulir!',
-                                  ),
-                                  backgroundColor: Color(0xFF059669),
-                                  duration: Duration(seconds: 2),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Lokasi GPS: $e'),
-                                  backgroundColor: const Color(0xFFDC2626),
-                                  duration: const Duration(seconds: 3),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                ),
-                errorText: formState.pickupError,
-                enabled: !formState.isSubmitting,
-                onChanged: formNotifier.setPickup,
+              // Adaptive Pickup & Dropoff Fields (2-kolom pada layar lebar/tablet, 1-kolom pada mobile)
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth >= 560;
+
+                  final pickupWidget = AppTextField(
+                    label: 'Lokasi Pengambilan (Pickup)',
+                    hint: 'Minimal 3 karakter (misal: Kantin Utama FMIPA Lt. 1)',
+                    controller: _pickupController,
+                    prefixIcon: Icons.storefront_outlined,
+                    textInputAction: TextInputAction.next,
+                    suffixIcon: IconButton(
+                      tooltip: 'Gunakan Koordinat GPS Kampus',
+                      icon: const Icon(
+                        Icons.my_location_rounded,
+                        color: Color(0xFF059669),
+                        size: 20,
+                      ),
+                      onPressed: formState.isSubmitting
+                          ? null
+                          : () async {
+                              try {
+                                final coords = await ref
+                                    .read(geoLocationServiceProvider)
+                                    .getCurrentLocation();
+                                final locationStr =
+                                    'Kantin Kampus UNESA (${coords.latitude.toStringAsFixed(4)}, ${coords.longitude.toStringAsFixed(4)})';
+                                _pickupController.text = locationStr;
+                                formNotifier.setPickup(locationStr);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Titik koordinat GPS berhasil disematkan ke formulir!',
+                                      ),
+                                      backgroundColor: Color(0xFF059669),
+                                      duration: Duration(seconds: 2),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Lokasi GPS: $e'),
+                                      backgroundColor: const Color(0xFFDC2626),
+                                      duration: const Duration(seconds: 3),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                    ),
+                    errorText: formState.pickupError,
+                    enabled: !formState.isSubmitting,
+                    onChanged: formNotifier.setPickup,
+                  );
+
+                  final dropoffWidget = AppTextField(
+                    label: 'Lokasi Tujuan Pengantaran (Dropoff)',
+                    hint: 'Minimal 3 karakter (misal: Lab Komputer Gedung B R.204)',
+                    controller: _dropoffController,
+                    prefixIcon: Icons.location_on_outlined,
+                    textInputAction: TextInputAction.next,
+                    errorText: formState.dropoffError,
+                    enabled: !formState.isSubmitting,
+                    onChanged: formNotifier.setDropoff,
+                  );
+
+                  if (isWide) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: pickupWidget),
+                        const SizedBox(width: 16),
+                        Expanded(child: dropoffWidget),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      pickupWidget,
+                      const SizedBox(height: 16),
+                      dropoffWidget,
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
-
-              // Dropoff Location
-              AppTextField(
-                label: 'Lokasi Tujuan Pengantaran (Dropoff)',
-                hint: 'Minimal 3 karakter (misal: Lab Komputer Gedung B R.204)',
-                controller: _dropoffController,
-                prefixIcon: Icons.location_on_outlined,
-                errorText: formState.dropoffError,
-                enabled: !formState.isSubmitting,
-                onChanged: formNotifier.setDropoff,
-              ),
-              const SizedBox(height: 16),
-
               // Tip Amount
               AppTextField(
                 label: 'Nominal Tip Imbalan (Rupiah)',
@@ -327,6 +357,8 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
                 controller: _tipController,
                 prefixIcon: Icons.payments_outlined,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _handleSubmit(),
                 errorText: formState.tipError,
                 enabled: !formState.isSubmitting,
                 onChanged: formNotifier.setTip,
@@ -491,6 +523,7 @@ class _CreateErrandScreenState extends ConsumerState<CreateErrandScreen> {
               ),
               const SizedBox(height: 24),
             ],
+            ),
           ),
         ),
       ),

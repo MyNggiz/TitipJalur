@@ -84,7 +84,11 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
             final IconData currentIcon = isSelected ? item.activeIcon : item.icon;
 
             return Expanded(
-              child: MouseRegion(
+              child: Semantics(
+                button: true,
+                selected: isSelected,
+                label: 'Navigasi tab ${item.label}',
+                child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 onEnter: (_) {
                   setState(() {
@@ -123,6 +127,7 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       curve: Curves.easeInOut,
+                      constraints: const BoxConstraints(minHeight: 48),
                       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
                         color: backgroundColor,
@@ -194,6 +199,7 @@ class _InteractiveBottomNavState extends State<InteractiveBottomNav> {
                   ),
                 ),
               ),
+            ),
             );
           }),
         ),

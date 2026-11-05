@@ -340,7 +340,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: ResponsiveContainer(
-              maxWidth: 650,
+              maxWidth: 960,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,7 +486,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           // Feed Content handled by feedState.when (Scrollable underneath fixed filter)
           Expanded(
             child: ResponsiveContainer(
-              maxWidth: 650,
+              maxWidth: 960,
               child: feedState.when(
                 // Kondisi UI 1: Initial Loading
                 loading: () => const LoadingStateView(
@@ -579,34 +579,73 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           ),
                         ),
                         Expanded(
-                          child: ListView.builder(
-                            padding: const EdgeInsets.only(
-                              top: 4,
-                              bottom: 24,
-                            ),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, index) {
-                              final errand = filtered[index];
-                              return FadeSlideEntry.staggered(
-                                index: index,
-                                child: ErrandCard(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 6,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final isWide = constraints.maxWidth >= 680;
+                              if (isWide) {
+                                return GridView.builder(
+                                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisExtent: 240,
+                                    crossAxisSpacing: 14,
+                                    mainAxisSpacing: 14,
                                   ),
-                                  errand: errand,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppRoutes.detail,
-                                      arguments: errand,
+                                  itemCount: filtered.length,
+                                  itemBuilder: (context, index) {
+                                    final errand = filtered[index];
+                                    return FadeSlideEntry.staggered(
+                                      index: index,
+                                      child: ErrandCard(
+                                        margin: EdgeInsets.zero,
+                                        errand: errand,
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.detail,
+                                            arguments: errand,
+                                          );
+                                        },
+                                        onAccept:
+                                            errand.status == OrderStatus.open
+                                                ? () => _handleAcceptErrand(errand)
+                                                : null,
+                                      ),
                                     );
                                   },
-                                  onAccept:
-                                      errand.status == OrderStatus.open
-                                          ? () => _handleAcceptErrand(errand)
-                                          : null,
+                                );
+                              }
+                              return ListView.builder(
+                                padding: const EdgeInsets.only(
+                                  top: 4,
+                                  bottom: 24,
                                 ),
+                                itemCount: filtered.length,
+                                itemBuilder: (context, index) {
+                                  final errand = filtered[index];
+                                  return FadeSlideEntry.staggered(
+                                    index: index,
+                                    child: ErrandCard(
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 6,
+                                      ),
+                                      errand: errand,
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppRoutes.detail,
+                                          arguments: errand,
+                                        );
+                                      },
+                                      onAccept:
+                                          errand.status == OrderStatus.open
+                                              ? () => _handleAcceptErrand(errand)
+                                              : null,
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -623,6 +662,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       floatingActionButton: SizedBox(
         height: 44,
         child: FloatingActionButton.extended(
+          tooltip: 'Buat pesanan titipan baru',
           onPressed: _openCreateErrandScreen,
           backgroundColor: const Color(0xFF059669),
           foregroundColor: Colors.white,

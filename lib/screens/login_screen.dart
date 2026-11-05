@@ -59,10 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final primaryColor = theme.colorScheme.primary;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFF8FAFC),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
@@ -168,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               prefixIcon: Icons.alternate_email_rounded,
+                              textInputAction: TextInputAction.next,
                               validator: (val) {
                                 if (val == null || val.trim().isEmpty) {
                                   return 'Email kampus wajib diisi';
@@ -184,8 +187,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               hint: 'Minimal 6 karakter',
                               controller: _passwordController,
                               obscureText: _obscurePassword,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) => _handleLogin(),
                               prefixIcon: Icons.lock_outline_rounded,
                               suffixIcon: IconButton(
+                                tooltip: _obscurePassword
+                                    ? 'Tampilkan kata sandi'
+                                    : 'Sembunyikan kata sandi',
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility_off_outlined

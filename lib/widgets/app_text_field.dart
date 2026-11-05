@@ -63,7 +63,7 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TextFormField(
+    final fieldWidget = TextFormField(
       controller: controller,
       initialValue: initialValue,
       validator: validator,
@@ -78,6 +78,7 @@ class AppTextField extends StatelessWidget {
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
       autofocus: autofocus,
+      scrollPadding: const EdgeInsets.all(28),
       style: const TextStyle(
         fontSize: 14,
         color: Color(0xFF0F172A),
@@ -136,6 +137,13 @@ class AppTextField extends StatelessWidget {
           borderSide: const BorderSide(color: Color(0xFFF1F5F9)),
         ),
       ),
+    );
+
+    return Semantics(
+      textField: true,
+      label: label,
+      hint: hint,
+      child: fieldWidget,
     );
   }
 }

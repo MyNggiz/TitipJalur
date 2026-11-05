@@ -19,7 +19,7 @@ class ErrandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final cardWidget = Container(
       margin: margin ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -221,47 +221,55 @@ class ErrandCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     if (showAction && errand.status == OrderStatus.open)
-                      SizedBox(
-                        height: 32,
-                        child: ElevatedButton.icon(
-                          onPressed: onAccept,
-                          icon: const Icon(Icons.handshake_outlined, size: 14),
-                          label: const Text('Ambil Titipan'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF059669),
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            textStyle: const TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      Semantics(
+                        button: true,
+                        label: 'Ambil titipan ${errand.item}',
+                        child: SizedBox(
+                          height: 32,
+                          child: ElevatedButton.icon(
+                            onPressed: onAccept,
+                            icon: const Icon(Icons.handshake_outlined, size: 14),
+                            label: const Text('Ambil Titipan'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF059669),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              textStyle: const TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
                       )
                     else if (onTap != null)
-                      SizedBox(
-                        height: 32,
-                        child: TextButton.icon(
-                          onPressed: onTap,
-                          icon: const Icon(Icons.arrow_forward_rounded, size: 13),
-                          label: const Text('Detail'),
-                          iconAlignment: IconAlignment.end,
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFF059669),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            textStyle: const TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w600,
+                      Semantics(
+                        button: true,
+                        label: 'Lihat detail titipan ${errand.item}',
+                        child: SizedBox(
+                          height: 32,
+                          child: TextButton.icon(
+                            onPressed: onTap,
+                            icon: const Icon(Icons.arrow_forward_rounded, size: 13),
+                            label: const Text('Detail'),
+                            iconAlignment: IconAlignment.end,
+                            style: TextButton.styleFrom(
+                              foregroundColor: const Color(0xFF059669),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              textStyle: const TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -273,6 +281,13 @@ class ErrandCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    return Semantics(
+      button: true,
+      label:
+          'Titipan ${errand.item}, kategori ${errand.category}, status ${errand.status.label}, pemohon ${errand.requester}, biaya tip ${errand.formattedTip}, jarak ${errand.distanceKm} kilometer.',
+      child: cardWidget,
     );
   }
 }

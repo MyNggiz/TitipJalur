@@ -98,17 +98,19 @@ class PrimaryButton extends StatelessWidget {
             child: content,
           );
 
-    if (width != null) {
-      return SizedBox(
-        width: width,
-        height: height,
-        child: buttonWidget,
-      );
-    }
+    final effectiveHeight = height >= 48.0 ? height : 48.0;
 
-    return SizedBox(
-      height: height,
+    final sized = SizedBox(
+      width: width,
+      height: effectiveHeight,
       child: buttonWidget,
+    );
+
+    return Semantics(
+      button: true,
+      enabled: effectiveOnPressed != null,
+      label: isLoading ? '$label, sedang memproses' : label,
+      child: sized,
     );
   }
 }
