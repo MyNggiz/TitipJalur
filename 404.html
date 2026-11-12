@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TitipJalur Redirecting...</title>
+  <script>
+    var path = window.location.pathname;
+    if (path.toLowerCase().indexOf('/titip_jalur') !== -1) {
+      var rel = path.substring(path.toLowerCase().indexOf('/titip_jalur') + '/titip_jalur'.length);
+      window.location.replace('/TitipJalur/' + rel.replace(/^\/+/, '') + window.location.search + window.location.hash);
+    } else {
+      window.location.replace('/TitipJalur/' + window.location.search + window.location.hash);
+    }
+  </script>
+</head>
+<body>
+  <p>Mengarahkan ke <a href="/TitipJalur/">TitipJalur</a>...</p>
+</body>
+</html>
