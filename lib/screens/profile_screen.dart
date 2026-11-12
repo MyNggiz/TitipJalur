@@ -1,7 +1,9 @@
+import '../models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
+import '../widgets/profile_form.dart';
 import '../widgets/primary_button.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -49,6 +51,68 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         (route) => false,
       );
     }
+  }
+
+  void _openEditProfileDialog(BuildContext context, UserModel? user) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Perbarui Profil Mahasiswa',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0F172A),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                ProfileForm(
+                  initialUser: user,
+                  onProfileSaved: (updated) {
+                    setState(() {});
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Profil ${updated.name} berhasil diperbarui!'),
+                        backgroundColor: const Color(0xFF059669),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildStatCard({
@@ -116,7 +180,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userEmail = user?.email ?? 'mhs@kampus.ac.id';
     final userRole = user?.role ?? 'Mahasiswa';
     final userInitial = userName.isNotEmpty ? userName[0].toUpperCase() : 'M';
-    const userNim = '22051204001';
+    final userNim = user?.nim ?? '22051204001';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -132,6 +196,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             color: Color(0xFF0F172A),
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Edit Profil Mahasiswa',
+            icon: const Icon(Icons.edit_note_rounded, color: Color(0xFF059669)),
+            onPressed: () => _openEditProfileDialog(context, user),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -240,6 +311,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => _openEditProfileDialog(context, user),
+                      icon: const Icon(Icons.edit_outlined, size: 16),
+                      label: const Text('Perbarui Informasi Profil'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF059669),
+                        side: const BorderSide(color: Color(0xFFA7F3D0)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                     ),
                   ),
                 ],

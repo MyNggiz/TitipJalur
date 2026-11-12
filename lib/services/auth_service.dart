@@ -75,6 +75,13 @@ class AuthService extends ChangeNotifier {
     return _currentUser;
   }
 
+  /// Updates the current active user and persists the updated model to local disk.
+  Future<void> setCurrentUser(UserModel user) async {
+    _currentUser = user;
+    await _saveSessionToDisk();
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     await Future<void>.delayed(const Duration(milliseconds: 50));
     _currentUser = null;
@@ -83,6 +90,15 @@ class AuthService extends ChangeNotifier {
       await prefs.remove(_userStorageKey);
     } catch (_) {}
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    // Lindungi singleton dari disposal permanen saat widget test unmount
+    if (identical(this, instance)) {
+      return;
+    }
+    super.dispose();
   }
 
   Future<void> _saveSessionToDisk() async {

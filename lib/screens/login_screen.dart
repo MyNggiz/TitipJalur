@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
+import '../services/profile_validator.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/fade_slide_entry.dart';
 import '../widgets/primary_button.dart';
@@ -171,15 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               keyboardType: TextInputType.emailAddress,
                               prefixIcon: Icons.alternate_email_rounded,
                               textInputAction: TextInputAction.next,
-                              validator: (val) {
-                                if (val == null || val.trim().isEmpty) {
-                                  return 'Email kampus wajib diisi';
-                                }
-                                if (!val.contains('@')) {
-                                  return 'Format email tidak valid';
-                                }
-                                return null;
-                              },
+                              validator: ProfileValidator.validateEmail,
                             ),
                             const SizedBox(height: 18),
                             AppTextField(

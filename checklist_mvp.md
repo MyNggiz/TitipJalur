@@ -5,7 +5,7 @@
 > **Aplikasi:** TitipJalur (*Peer-to-Peer Micro-Errand & Commuter Delivery Platform*)  
 > **Author:** Muhammad Naufal Fahrel (NIM: 22051204001)  
 > **Target Akhir:** MVP Lengkap Sesuai Lingkup Proyek & Siap Didemonstrasikan  
-> **Status Verifikasi Keseluruhan:** **100% SELESAI (129/129 Unit & Widget Tests: PASSED)**  
+> **Status Verifikasi Keseluruhan:** **100% SELESAI (142/142 Unit & Widget Tests: PASSED)**  
 
 ---
 
@@ -28,6 +28,7 @@ Berikut adalah checklist matriks ketercapaian seluruh fitur inti dan lanjutan MV
 | **11** | **6 Kondisi UI Wajib Dr. Haryono** | Penanganan deklaratif lengkap untuk:<br>1. *Initial Loading*<br>2. *Data Loaded*<br>3. *Empty State*<br>4. *Error State + Tombol Retry*<br>5. *Validasi Input Formulir*<br>6. *Loading Submit Anti-Double Tap* | `lib/widgets/state_view.dart`<br>`lib/screens/dashboard_screen.dart`<br>`lib/screens/create_errand_screen.dart` | `test/p4_six_ui_states_widget_test.dart` | **unit test: PASSED** |
 | **12** | **Navigasi Shell & Routing Terpisah** | Arsitektur rute terpisah via `AppRoutes.onGenerateRoute` dan shell navigasi responsif dengan floating interactive bottom nav 4 tab (*Home, Feed Rute, Titipan, Akun*). | `lib/routes/app_routes.dart`<br>`lib/screens/main_shell_screen.dart`<br>`lib/widgets/interactive_bottom_nav.dart` | `test/p3_prototype_navigation_test.dart`<br>`test/homepage_and_navigation_test.dart` | **unit test: PASSED** |
 | **13** | **Responsive UX (Pertemuan 08)** | Layout Adaptif (GridView 2-kolom tablet $\ge 680\text{px}$ vs ListView ponsel, formulir 2-kolom), Keyboard-Safe UI (zero-overflow, scrollPadding 28dp, onDrag dismissal, textInputAction flow), Accessibility Dasar (pohon Semantics TalkBack, min touch target $\ge 48\text{ dp}$, tooltips, kontras tinggi WCAG AAA), dan Feedback Aksi (loading spinner anti-double tap, floating SnackBar, status banner, dialog konfirmasi). | `lib/screens/dashboard_screen.dart`<br>`lib/screens/create_errand_screen.dart`<br>`lib/widgets/app_text_field.dart`<br>`lib/widgets/primary_button.dart`<br>`lib/widgets/errand_card.dart` | `test/unit/p8_responsive_ux_test.dart`<br>`test/p8_screenshot_capture_test.dart` | **unit test: PASSED** |
+| **14** | **Test & Refactor (Pertemuan 09)** | Pencegahan duplikasi kode (*Avoid Duplikasi Code*) dengan memusatkan aturan validasi input pada `ProfileValidator` (digunakan bersama oleh Login & Profil). Pemisahan tanggung jawab murni (*Separation of Concerns*): `ProfileForm` murni untuk input & status UI, dan `ProfileRepository` murni untuk request API & sinkronisasi sesi pengguna. Teruji via alur TDD 4-tahap (1. Tes awal lulus, 2. Pindahkan satu bagian, 3. Tes ulang, 4. Commit). | `lib/widgets/profile_form.dart`<br>`lib/services/profile_validator.dart`<br>`lib/repositories/profile_repository.dart` | `test/unit/p9_profile_test_and_refactor_test.dart` | **unit test: PASSED** |
 
 ---
 
@@ -52,22 +53,22 @@ Berikut adalah checklist matriks ketercapaian seluruh fitur inti dan lanjutan MV
   - Kegagalan / Offline $\rightarrow$ `ErrorStateView` dengan tombol coba lagi (*Retry*) yang mengeksekusi fetch ulang.
 
 - [x] **Kriteria 5: Uji seluruh fitur inti, perbaiki bug penghambat, lalu uji regresi**  
-  *Status:* **SELESAI.** Tidak ada regresi. 129/129 test cases lulus 100% dan `flutter analyze` bersih (0 error, 0 warning).
+  *Status:* **SELESAI.** Tidak ada regresi. 142/142 test cases lulus 100% dan `flutter analyze` bersih (0 error, 0 warning).
 
 ---
-
-## 3. Rekapitulasi Eksekusi Test Suite (129 Test Cases)
+## 3. Rekapitulasi Eksekusi Test Suite (142 Test Cases)
 
 Berikut adalah ringkasan hasil eksekusi resmi perintah `flutter test`:
 
 ```text
 00:00 +0: loading test/p3_prototype_navigation_test.dart
 ...
-00:11 +129: All tests passed!
+00:10 +142: All tests passed!
 
-Rincian Sebaran Pengujian (129 Test Cases):
+Rincian Sebaran Pengujian (142 Test Cases Bebas Regresi):
+• test/unit/p9_profile_test_and_refactor_test.dart: 13 tests PASSED (Validation, Repo, Form UI)
 • test/unit/p8_responsive_ux_test.dart: 11 tests PASSED (Layout Adaptif, Keyboard-Safe, Semantics, Touch Targets, Feedback Aksi)
-• test/p8_screenshot_capture_test.dart: 4 tests PASSED (Render otomatis 4 screenshot FHD+ P8)
+• test/p8_screenshot_capture_test.dart: 4 tests PASSED
 • test/unit/p7_auth_advanced_feature_test.dart: 6 tests PASSED
 • test/unit/p7_camera_pod_advanced_feature_test.dart: 5 tests PASSED
 • test/unit/p7_geolocation_advanced_feature_test.dart: 6 tests PASSED
@@ -87,7 +88,7 @@ Rincian Sebaran Pengujian (129 Test Cases):
 • test/p5_screenshot_capture_test.dart: 6 tests PASSED
 • test/p4_screenshot_capture_test.dart: 6 tests PASSED
 
-TOTAL: 129 / 129 PASSED (100% SUKSES)
+TOTAL: 142 / 142 PASSED (100% SUKSES TANPA REGRESI)
 ```
 
 ---

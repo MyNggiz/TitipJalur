@@ -4,6 +4,8 @@ class UserModel {
   final String email;
   final String role;
   final String? avatarUrl;
+  final String? phoneNumber;
+  final String? nim;
 
   const UserModel({
     required this.id,
@@ -11,6 +13,8 @@ class UserModel {
     required this.email,
     required this.role,
     this.avatarUrl,
+    this.phoneNumber,
+    this.nim,
   });
 
   factory UserModel.guest() {
@@ -20,6 +24,8 @@ class UserModel {
       email: 'mhs@kampus.ac.id',
       role: 'Mahasiswa',
       avatarUrl: null,
+      phoneNumber: '081234567890',
+      nim: '22051204001',
     );
   }
 
@@ -30,6 +36,8 @@ class UserModel {
       'email': email,
       'role': role,
       'avatarUrl': avatarUrl,
+      'phoneNumber': phoneNumber,
+      'nim': nim,
     };
   }
 
@@ -40,6 +48,8 @@ class UserModel {
       email: map['email'] as String? ?? '',
       role: map['role'] as String? ?? 'Mahasiswa',
       avatarUrl: map['avatarUrl'] as String?,
+      phoneNumber: map['phoneNumber'] as String?,
+      nim: map['nim'] as String?,
     );
   }
 
@@ -49,6 +59,8 @@ class UserModel {
     String? email,
     String? role,
     String? avatarUrl,
+    String? phoneNumber,
+    String? nim,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -56,6 +68,8 @@ class UserModel {
       email: email ?? this.email,
       role: role ?? this.role,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      nim: nim ?? this.nim,
     );
   }
 
@@ -72,7 +86,9 @@ class UserModel {
         other.name == name &&
         other.email == email &&
         other.role == role &&
-        other.avatarUrl == avatarUrl;
+        other.avatarUrl == avatarUrl &&
+        other.phoneNumber == phoneNumber &&
+        other.nim == nim;
   }
 
   @override
@@ -81,6 +97,8 @@ class UserModel {
         name.hashCode ^
         email.hashCode ^
         role.hashCode ^
-        avatarUrl.hashCode;
+        avatarUrl.hashCode ^
+        phoneNumber.hashCode ^
+        nim.hashCode;
   }
 }

@@ -83,11 +83,14 @@ Aplikasi telah dilengkapi mekanisme **Akun Demo / Mode Tamu Kampus** untuk mempe
 
 ## 4. Panduan Menjalankan Seluruh Suite Pengujian (Unit & Widget Tests)
 
-Aplikasi memiliki **112 test cases** terotomasi yang menguji seluruh logika bisnis, state management, dan sensor hardware:
+Aplikasi memiliki **142 test cases** terotomasi yang menguji seluruh logika bisnis, state management, sensor hardware, dan refactoring arsitektur:
 
 ```bash
 # Menjalankan seluruh rangkaian tes (112 test cases)
 flutter test
+
+# Menjalankan tes refactoring arsitektur & validasi P9
+flutter test test/unit/p9_profile_test_and_refactor_test.dart
 
 # Menjalankan tes unit spesifik (fitur sensor & logika bisnis)
 flutter test test/unit/
