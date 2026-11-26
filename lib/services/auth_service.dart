@@ -22,21 +22,30 @@ class AuthService extends ChangeNotifier {
   bool get isRequester => !isRunner;
 
   /// Restores saved authentication session from local disk on app startup.
-  Future<UserModel?> restoreSession() async {
-    if (_isInitialized) return _currentUser;
+  Future<UserModel?> restoreSession({bool force = false}) async {
+    if (_isInitialized && !force) return _currentUser;
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonStr = prefs.getString(_userStorageKey);
       if (jsonStr != null && jsonStr.isNotEmpty) {
         final map = jsonDecode(jsonStr) as Map<String, dynamic>;
         _currentUser = UserModel.fromMap(map);
+      } else {
+        _currentUser = null;
       }
     } catch (e) {
+      _currentUser = null;
       debugPrint('[AuthService] Gagal memulihkan sesi login: $e');
     }
     _isInitialized = true;
     notifyListeners();
     return _currentUser;
+  }
+
+  @visibleForTesting
+  void resetForTest() {
+    _currentUser = null;
+    _isInitialized = false;
   }
 
   Future<UserModel> login(String email, String password, {String role = 'Mahasiswa'}) async {

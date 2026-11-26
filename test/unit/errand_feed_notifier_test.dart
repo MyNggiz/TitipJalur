@@ -40,7 +40,7 @@ class FakeErrandRepository implements ErrandRepository {
   }
 
   @override
-  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'}) async {
+  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner', String? runnerId}) async {
     if (shouldThrowError) {
       throw Exception('Gagal klaim');
     }

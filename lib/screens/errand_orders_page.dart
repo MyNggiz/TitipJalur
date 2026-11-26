@@ -24,6 +24,53 @@ enum StatusFilter {
 class ErrandOrdersPage extends ConsumerStatefulWidget {
   const ErrandOrdersPage({super.key});
 
+  /// Filters orders belonging strictly to the active requester.
+  static List<ErrandModel> filterMyRequests(
+    List<ErrandModel> allErrands, {
+    required String currentUserName,
+    String? currentUserId,
+  }) {
+    final normalizedUser = currentUserName.toLowerCase().trim();
+    final normalizedUserId = currentUserId?.trim();
+    return allErrands.where((item) {
+      if (normalizedUserId != null &&
+          normalizedUserId.isNotEmpty &&
+          item.requesterId != null &&
+          item.requesterId!.trim().isNotEmpty) {
+        return item.requesterId!.trim() == normalizedUserId;
+      }
+      final req = item.requester.toLowerCase().trim();
+      return normalizedUser.isNotEmpty && req == normalizedUser;
+    }).toList();
+  }
+
+  /// Filters tasks claimed by the active runner (never includes unclaimed open orders).
+  static List<ErrandModel> filterRunnerTasks(
+    List<ErrandModel> allErrands, {
+    required String currentUserName,
+    String? currentUserId,
+  }) {
+    final normalizedUser = currentUserName.toLowerCase().trim();
+    final normalizedUserId = currentUserId?.trim();
+    return allErrands.where((item) {
+      if (item.status == OrderStatus.open) {
+        return false;
+      }
+      if (normalizedUserId != null &&
+          normalizedUserId.isNotEmpty &&
+          item.runnerId != null &&
+          item.runnerId!.trim().isNotEmpty) {
+        return item.runnerId!.trim() == normalizedUserId;
+      }
+      if (item.runnerName != null && item.runnerName!.trim().isNotEmpty) {
+        return normalizedUser.isNotEmpty &&
+            item.runnerName!.toLowerCase().trim() == normalizedUser;
+      }
+      final req = item.requester.toLowerCase().trim();
+      return normalizedUser.isNotEmpty && req != normalizedUser;
+    }).toList();
+  }
+
   @override
   ConsumerState<ErrandOrdersPage> createState() => _ErrandOrdersPageState();
 }
@@ -499,16 +546,16 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
     );
   }
 
-  Widget _buildMyRequestsTab(List<ErrandModel> allErrands, String currentUserName) {
-    final myErrands = allErrands.where((item) {
-      final req = item.requester.toLowerCase().trim();
-      final user = currentUserName.toLowerCase().trim();
-      return req == user ||
-          req.contains('naufal') ||
-          req.contains('saya') ||
-          item.id.endsWith('1') ||
-          item.id.endsWith('3');
-    }).toList();
+  Widget _buildMyRequestsTab(
+    List<ErrandModel> allErrands,
+    String currentUserName, {
+    String? currentUserId,
+  }) {
+    final myErrands = ErrandOrdersPage.filterMyRequests(
+      allErrands,
+      currentUserName: currentUserName,
+      currentUserId: currentUserId,
+    );
 
     final filtered = _filterErrands(myErrands);
 
@@ -594,13 +641,16 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
     );
   }
 
-  Widget _buildRunnerTasksTab(List<ErrandModel> allErrands, String currentUserName) {
-    final runnerTasks = allErrands.where((item) {
-      final req = item.requester.toLowerCase().trim();
-      final user = currentUserName.toLowerCase().trim();
-      return (req != user && !req.contains('naufal')) ||
-          item.status == OrderStatus.accepted;
-    }).toList();
+  Widget _buildRunnerTasksTab(
+    List<ErrandModel> allErrands,
+    String currentUserName, {
+    String? currentUserId,
+  }) {
+    final runnerTasks = ErrandOrdersPage.filterRunnerTasks(
+      allErrands,
+      currentUserName: currentUserName,
+      currentUserId: currentUserId,
+    );
 
     final filtered = _filterErrands(runnerTasks);
 
@@ -794,8 +844,16 @@ class _ErrandOrdersPageState extends ConsumerState<ErrandOrdersPage>
                   return TabBarView(
                     controller: _tabController,
                     children: [
-                      _buildMyRequestsTab(errands, currentUserName),
-                      _buildRunnerTasksTab(errands, currentUserName),
+                      _buildMyRequestsTab(
+                        errands,
+                        currentUserName,
+                        currentUserId: currentUser?.id,
+                      ),
+                      _buildRunnerTasksTab(
+                        errands,
+                        currentUserName,
+                        currentUserId: currentUser?.id,
+                      ),
                     ],
                   );
                 },

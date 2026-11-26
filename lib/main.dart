@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
+import 'services/auth_service.dart';
 import 'services/runtime_log.dart';
 
-void main() {
+Future<void> main() async {
   final previousFlutterError = FlutterError.onError;
   FlutterError.onError = (details) {
     RuntimeLog.flutterError();
@@ -21,6 +22,7 @@ void main() {
   RuntimeLog.startupStarted();
   try {
     WidgetsFlutterBinding.ensureInitialized();
+    await AuthService.instance.restoreSession();
     runApp(
       const ProviderScope(
         child: TitipJalurApp(),

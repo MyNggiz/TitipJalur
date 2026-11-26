@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'routes/app_routes.dart';
+import 'services/auth_service.dart';
 
 class TitipJalurApp extends StatelessWidget {
   const TitipJalurApp({super.key});
+
+  static String resolveInitialRoute() {
+    return AuthService.instance.isAuthenticated
+        ? AppRoutes.home
+        : AppRoutes.login;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +19,7 @@ class TitipJalurApp extends StatelessWidget {
     return MaterialApp(
       title: 'TitipJalur',
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
+      initialRoute: resolveInitialRoute(),
       onGenerateRoute: AppRoutes.onGenerateRoute,
       theme: ThemeData(
         useMaterial3: true,

@@ -10,7 +10,7 @@ import 'package:titip_jalur/routes/app_routes.dart';
 import 'package:titip_jalur/screens/errand_orders_page.dart';
 import 'package:titip_jalur/services/auth_service.dart';
 import 'package:titip_jalur/services/errand_local_storage_service.dart';
-import 'package:titip_jalur/providers/errand_provider.dart';
+import 'package:titip_jalur/controllers/errand_feed_notifier.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,7 @@ void main() {
 
       final restored = await AuthService.instance.restoreSession(force: true);
       expect(restored, isNotNull);
-      expect(restored!.isGuest, isTrue);
+      expect(restored!.id, equals('usr_mhs_01'));
       expect(restored.role, equals('Mahasiswa'));
       expect(AuthService.instance.isAuthenticated, isTrue);
     });
@@ -242,7 +242,7 @@ void main() {
       await storage.saveErrands([]);
       final repo = ErrandRepositoryImpl(localStorageService: storage);
       await repo.getErrands();
-      await repo.deleteErrand('non_existent');
+      await expectLater(repo.deleteErrand('non_existent'), throwsException);
       expect(await repo.getErrands(), isEmpty);
     });
 
@@ -662,7 +662,14 @@ void main() {
 
     testWidgets('4.14 Widget Permintaan Saya hides other user order ending with 1', (tester) async {
       SharedPreferences.setMockInitialValues({});
-      await AuthService.instance.login('budi@kampus.ac.id', 'pass123');
+      await AuthService.instance.setCurrentUser(
+        const UserModel(
+          id: 'usr_budi',
+          name: 'Budi',
+          email: 'budi@kampus.ac.id',
+          role: 'Mahasiswa',
+        ),
+      );
 
       const otherOrder = ErrandModel(
         id: 'other_order_1',
@@ -689,7 +696,7 @@ void main() {
 
       expect(find.text('Pesanan Rahasia Siti'), findsNothing);
       expect(find.text('Belum Ada Permintaan'), findsOneWidget);
-      await AuthService.instance.logout();
+      AuthService.instance.resetForTest();
     });
   });
 
@@ -922,7 +929,14 @@ void main() {
 
     testWidgets('5.15 Widget Tugas Belanja / Antar hides unclaimed open order from another user', (tester) async {
       SharedPreferences.setMockInitialValues({});
-      await AuthService.instance.login('budi@kampus.ac.id', 'pass123');
+      await AuthService.instance.setCurrentUser(
+        const UserModel(
+          id: 'usr_budi',
+          name: 'Budi',
+          email: 'budi@kampus.ac.id',
+          role: 'Runner',
+        ),
+      );
 
       const openOther = ErrandModel(
         id: 'open_other_widget_1',
@@ -952,7 +966,7 @@ void main() {
 
       expect(find.text('Order Belum Diklaim'), findsNothing);
       expect(find.text('Belum Ada Tugas Belanja'), findsOneWidget);
-      await AuthService.instance.logout();
+      AuthService.instance.resetForTest();
     });
   });
 }

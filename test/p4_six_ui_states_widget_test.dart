@@ -51,7 +51,7 @@ class MockErrandRepository implements ErrandRepository {
   }
 
   @override
-  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'}) async {
+  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner', String? runnerId}) async {
     final index = items.indexWhere((e) => e.id == id);
     if (index != -1) {
       final updated = items[index].copyWith(status: OrderStatus.accepted);

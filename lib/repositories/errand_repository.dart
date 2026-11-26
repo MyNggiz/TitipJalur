@@ -19,7 +19,11 @@ abstract class ErrandRepository {
     bool simulateError = false,
   });
 
-  Future<ErrandModel> acceptErrand(String id, {String runnerName = 'Runner'});
+  Future<ErrandModel> acceptErrand(
+    String id, {
+    String runnerName = 'Runner',
+    String? runnerId,
+  });
 
   Future<ErrandModel> completeErrand(String id, {String? proofOfDeliveryPath});
   Future<void> deleteErrand(String id);
@@ -85,9 +89,7 @@ class ErrandRepositoryImpl implements ErrandRepository {
     final storage = _localStorageService;
     if (!_isLoadedFromStorage && storage != null) {
       final loaded = await storage.loadErrands();
-      if (loaded.isNotEmpty) {
-        _errands = List<ErrandModel>.from(loaded);
-      }
+      _errands = List<ErrandModel>.from(loaded);
       _isLoadedFromStorage = true;
     }
 
@@ -116,7 +118,12 @@ class ErrandRepositoryImpl implements ErrandRepository {
     }
 
     _errands.insert(0, created);
-    await _localStorageService?.saveErrands(_errands);
+    try {
+      await _localStorageService?.saveErrands(_errands);
+    } catch (_) {
+      _errands.removeAt(0);
+      rethrow;
+    }
     await _notificationService?.showOrderCreatedNotification(
       item: created.item,
       tip: created.tip,
@@ -128,6 +135,7 @@ class ErrandRepositoryImpl implements ErrandRepository {
   Future<ErrandModel> acceptErrand(
     String id, {
     String runnerName = 'Runner',
+    String? runnerId,
   }) async {
     final index = _errands.indexWhere((element) => element.id == id);
     if (index == -1) {
@@ -137,15 +145,28 @@ class ErrandRepositoryImpl implements ErrandRepository {
     final current = _errands[index];
     ErrandBusinessValidator.validateAccept(current, runnerName);
 
-    ErrandModel updated = current.copyWith(status: OrderStatus.accepted);
+    ErrandModel updated = current.copyWith(
+      status: OrderStatus.accepted,
+      runnerName: runnerName,
+      runnerId: runnerId,
+    );
     if (_apiService != null) {
       updated = await _apiService!.acceptErrand(id, runnerName: runnerName);
+      updated = updated.copyWith(
+        runnerName: updated.runnerName ?? runnerName,
+        runnerId: updated.runnerId ?? runnerId,
+      );
     } else {
       await Future<void>.delayed(const Duration(milliseconds: 10));
     }
 
     _errands[index] = updated;
-    await _localStorageService?.saveErrands(_errands);
+    try {
+      await _localStorageService?.saveErrands(_errands);
+    } catch (_) {
+      _errands[index] = current;
+      rethrow;
+    }
     await _notificationService?.showOrderAcceptedNotification(
       item: updated.item,
       runnerName: runnerName,
@@ -180,7 +201,12 @@ class ErrandRepositoryImpl implements ErrandRepository {
     }
 
     _errands[index] = updated;
-    await _localStorageService?.saveErrands(_errands);
+    try {
+      await _localStorageService?.saveErrands(_errands);
+    } catch (_) {
+      _errands[index] = current;
+      rethrow;
+    }
     await _notificationService?.showOrderCompletedNotification(
       item: updated.item,
       hasProofOfDelivery: updated.proofOfDeliveryPath != null,
@@ -204,7 +230,12 @@ class ErrandRepositoryImpl implements ErrandRepository {
     }
 
     _errands.removeAt(index);
-    await _localStorageService?.saveErrands(_errands);
+    try {
+      await _localStorageService?.saveErrands(_errands);
+    } catch (_) {
+      _errands.insert(index, current);
+      rethrow;
+    }
   }
 }
 

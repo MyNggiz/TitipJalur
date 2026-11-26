@@ -46,6 +46,9 @@ class ErrandModel {
   final String dropoff;
   final int tip;
   final String requester;
+  final String? requesterId;
+  final String? runnerId;
+  final String? runnerName;
   final OrderStatus status;
   final double distanceKm;
   final String category;
@@ -60,6 +63,9 @@ class ErrandModel {
     required this.dropoff,
     required this.tip,
     required this.requester,
+    this.requesterId,
+    this.runnerId,
+    this.runnerName,
     this.status = OrderStatus.open,
     this.distanceKm = 1.0,
     this.category = 'Kantin',
@@ -87,6 +93,9 @@ class ErrandModel {
     String? dropoff,
     int? tip,
     String? requester,
+    String? requesterId,
+    String? runnerId,
+    String? runnerName,
     OrderStatus? status,
     double? distanceKm,
     String? category,
@@ -101,6 +110,9 @@ class ErrandModel {
       dropoff: dropoff ?? this.dropoff,
       tip: tip ?? this.tip,
       requester: requester ?? this.requester,
+      requesterId: requesterId ?? this.requesterId,
+      runnerId: runnerId ?? this.runnerId,
+      runnerName: runnerName ?? this.runnerName,
       status: status ?? this.status,
       distanceKm: distanceKm ?? this.distanceKm,
       category: category ?? this.category,
@@ -118,6 +130,9 @@ class ErrandModel {
       'dropoff': dropoff,
       'tip': tip,
       'requester': requester,
+      if (requesterId != null) 'requesterId': requesterId,
+      if (runnerId != null) 'runnerId': runnerId,
+      if (runnerName != null) 'runnerName': runnerName,
       'status': status.name,
       'distanceKm': distanceKm,
       'category': category,
@@ -218,6 +233,9 @@ class ErrandModel {
     final podPath = json['proofOfDeliveryPath'] as String?;
     final lat = (json['latitude'] as num?)?.toDouble();
     final lng = (json['longitude'] as num?)?.toDouble();
+    final requesterId = json['requesterId'] as String?;
+    final runnerId = json['runnerId'] as String?;
+    final runnerName = json['runnerName'] as String?;
 
     return ErrandModel(
       id: idStr,
@@ -226,6 +244,9 @@ class ErrandModel {
       dropoff: dropoffStr,
       tip: tipNum,
       requester: requesterStr,
+      requesterId: requesterId,
+      runnerId: runnerId,
+      runnerName: runnerName,
       status: parsedStatus,
       distanceKm: parsedDistance,
       category: parsedCategory,
@@ -256,6 +277,9 @@ class ErrandModel {
         dropoff: map['dropoff'] as String? ?? '',
         tip: (map['tip'] as num?)?.toInt() ?? 0,
         requester: map['requester'] as String? ?? '',
+        requesterId: map['requesterId'] as String?,
+        runnerId: map['runnerId'] as String?,
+        runnerName: map['runnerName'] as String?,
         status: parsedStatus,
         distanceKm: (map['distanceKm'] as num?)?.toDouble() ?? 0.0,
         category: map['category'] as String? ?? 'Umum',
