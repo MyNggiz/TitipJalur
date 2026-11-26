@@ -1,8 +1,27 @@
 # Pertemuan 11 — Bug Fixing, Regression Testing (200+ UT), CI/CD & Release V1.1
 
-## 1. Manajemen Issues (GitHub Issues)
+> **Repositori:** [`https://github.com/MyNggiz/TitipJalur`](https://github.com/MyNggiz/TitipJalur)  
+> **Branch Baseline:** `v1.0` (`8d8c81c` — Release OK, `version: 1.0.0+1`)  
+> **Branch Development:** `v1.0_dev` (perbaikan bug & pengujian CI/CD)  
+> **Branch Release:** `V1.1` (`version: 1.1.0+2`)
 
-Minimal 10 issues telah dicatat pada [GitHub Issues TitipJalur](https://github.com/MyNggiz/TitipJalur/issues) (5 bug found + 5 feature proposals):
+---
+
+## Checklist Penyelesaian Tugas P11
+
+| Kriteria Tugas Dosen | Status | Bukti |
+| :--- | :--- | :--- |
+| Minimal 10 issues di GitHub/JIRA (min. 5 bug found + fitur) | **Selesai** | [GitHub Issues #1–#10](https://github.com/MyNggiz/TitipJalur/issues?q=is%3Aissue) (`#1`–`#5` Bug Closed, `#6`–`#10` Fitur) |
+| Branch `v1.0` sebagai Release OK | **Selesai** | Branch `v1.0` di commit `8d8c81c` (`1.0.0+1`) |
+| Branch `v1.0_dev` fokus perbaikan bug tertentu | **Selesai** | Branch `v1.0_dev` (commit `8a3e4b9` Red → `1598c2f` Green) |
+| Menjalankan 200+ Unit Test (passed/failed) | **Selesai** | **207/207** unit & widget test lulus (`flutter test`) |
+| Efek Unit Test Failed + Screenshot | **Selesai** | [Run #45826310244](https://github.com/MyNggiz/TitipJalur/actions/runs/45826310244) & [Screenshot Red](screenshots/01_ci_cd_failed_ut_blocked_deploy.png) |
+| All Passed Hijau → Auto Build → Deploy → Live + Screenshot | **Selesai** | [Run #45827630262](https://github.com/MyNggiz/TitipJalur/actions/runs/45827630262) & [Screenshot Green](screenshots/02_ci_cd_passed_207_ut_auto_build.png) |
+| Branch `V1.1` | **Selesai** | Branch `V1.1` (`version: 1.1.0+2`) |
+
+---
+
+## 1. Manajemen Issues (GitHub Issues #1–#10)
 
 | # | Tipe | Judul | Status P11 |
 | :--- | :--- | :--- | :--- |
@@ -19,15 +38,7 @@ Minimal 10 issues telah dicatat pada [GitHub Issues TitipJalur](https://github.c
 
 ---
 
-## 2. Alur Branch Git
-
-- **`v1.0`** (`8d8c81c`): Baseline **Release OK** dari Pertemuan 10 (`version: 1.0.0+1`).
-- **`v1.0_dev`**: Branch pengembangan & perbaikan bug P11 (under testing & CI/CD gate).
-- **`V1.1`**: Branch rilis stabil setelah seluruh 207 unit & widget test lulus Hijau (`version: 1.1.0+2`).
-
----
-
-## 3. Perbaikan Bug yang Dilakukan (`v1.0_dev`)
+## 2. Alur Branch Git & Perbaikan Bug (`v1.0_dev` → `V1.1`)
 
 1. **Bug #1 (`lib/main.dart`, `lib/app.dart`, `lib/services/auth_service.dart`):**
    - `main()` kini memanggil `await AuthService.instance.restoreSession()` sebelum `runApp()`, dan `TitipJalurApp.resolveInitialRoute()` mengarahkan ke `AppRoutes.home` jika sesi aktif berhasil dipulihkan.
@@ -42,22 +53,54 @@ Minimal 10 issues telah dicatat pada [GitHub Issues TitipJalur](https://github.c
 
 ---
 
-## 4. Pengujian Unit Test (207 UT) & Efek Unit Test Failed vs Passed
+## 3. Rincian 207 Unit & Widget Tests
 
-Pipeline CI/CD (`.github/workflows/ci_cd.yml`) memiliki dua tahap berurutan:
-1. **`Unit Test Gate (200+ UT)`**: Menjalankan `flutter analyze lib` dan `flutter test` (total **207** unit & widget tests, termasuk **65** regression tests baru di `test/unit/p11_bugfix_regression_test.dart`).
-2. **`Auto Build & Deploy (Live)`**: Bergantung pada `needs: unit-test` (`if: success()`), bertugas membangun `app-release.apk`, mengunggah artifact, dan mempublikasikan release pada branch `V1.1`.
+Total **207 tests** dijalankan oleh `flutter test` (`142` test existing + `65` regression test baru P11):
 
-### Efek Ketika Unit Test Failed (Fase Red — Run `#45826310244`)
+| File Test | Jumlah Test |
+| :--- | :---: |
+| `test/unit/p11_bugfix_regression_test.dart` (Baru P11) | 65 |
+| `test/unit/errand_business_rules_test.dart` | 15 |
+| `test/unit/p9_profile_test_and_refactor_test.dart` | 13 |
+| `test/unit/p8_responsive_ux_test.dart` | 11 |
+| `test/unit/errand_api_service_test.dart` | 9 |
+| `test/unit/errand_feed_notifier_test.dart` | 9 |
+| `test/p7_screenshot_capture_test.dart` | 8 |
+| `test/unit/errand_repository_impl_test.dart` | 7 |
+| `test/p4_six_ui_states_widget_test.dart` | 7 |
+| `test/unit/errand_model_contract_test.dart` | 6 |
+| `test/unit/p7_geolocation_advanced_feature_test.dart` | 6 |
+| `test/p5_local_persistence_crud_test.dart` | 6 |
+| `test/p4_screenshot_capture_test.dart` | 6 |
+| `test/p5_screenshot_capture_test.dart` | 6 |
+| `test/p6_screenshot_capture_test.dart` | 6 |
+| `test/p3_prototype_navigation_test.dart` | 5 |
+| `test/p5_mvp_features_test.dart` | 5 |
+| `test/unit/p7_camera_pod_advanced_feature_test.dart` | 4 |
+| `test/p8_screenshot_capture_test.dart` | 4 |
+| `test/homepage_and_navigation_test.dart` | 3 |
+| `test/unit/p7_auth_advanced_feature_test.dart` | 3 |
+| `test/unit/p7_notifications_advanced_feature_test.dart` | 3 |
+| **Total** | **207** |
+
+---
+
+## 4. Efek Unit Test Failed vs Passed di CI/CD
+
+Pipeline CI/CD (`.github/workflows/ci_cd.yml`) memiliki dua job berurutan:
+1. **`Unit Test Gate (200+ UT)`**: Menjalankan `flutter analyze lib` dan `flutter test` (207 tests).
+2. **`Auto Build & Deploy (Live)`**: Bergantung pada `needs: unit-test` (`if: success()`), membangun `app-release.apk`, mengunggah artifact, dan mempublikasikan GitHub Release pada branch `V1.1`.
+
+### A. Unit Test Failed (Fase Red — [Run #45826310244](https://github.com/MyNggiz/TitipJalur/actions/runs/45826310244))
 - Commit `8a3e4b9` pada `v1.0_dev` menjalankan 200+ UT sebelum perbaikan bug diterapkan.
-- **Hasil:** Job `Unit Test Gate (200+ UT)` **FAILED (Merah)** dengan exit code 1.
-- **Efeknya:** Job `Auto Build & Deploy (Live)` **otomatis diblokir / di-skip (0s)**. APK tidak dibangun dan aplikasi tidak di-deploy ke lingkungan Live, sehingga kode bermasalah tidak pernah lolos ke rilis.
+- **Hasil:** Job `Unit Test Gate (200+ UT)` **FAILED (Merah)** dengan `exit code 1`.
+- **Efeknya:** Job `Auto Build & Deploy (Live)` **otomatis diblokir / di-skip (0s)**. APK tidak dibangun dan rilis tidak di-deploy ke Live, sehingga bug tidak pernah lolos ke pengguna.
 
 ![CI/CD Failed Unit Test Gate memblokir Auto Build & Deploy](screenshots/01_ci_cd_failed_ut_blocked_deploy.png)
 
-### Ketika Semua Unit Test Passed Hijau (Fase Green — Run `#45827630262`)
+### B. All Passed Hijau (Fase Green — [Run #45827630262](https://github.com/MyNggiz/TitipJalur/actions/runs/45827630262))
 - Commit `1598c2f` pada `v1.0_dev` menerapkan perbaikan Bug #1–#5.
-- **Hasil Lokal & CI:** `flutter analyze lib` bersih (`No issues found!`) dan seluruh **207/207 tests passed!** (`Unit Test Gate (200+ UT)` **Hijau** dalam 1m56s).
-- **Efeknya:** Job `Auto Build & Deploy (Live)` otomatis berjalan dan berhasil (`4m31s`), menghasilkan `app-release.apk` dan mengunggah artifact rilis yang siap diuji.
+- **Hasil Lokal & CI:** `flutter analyze lib` bersih (`No issues found!`) dan **207/207 tests passed!** (`Unit Test Gate (200+ UT)` **Hijau** dalam `1m 56s`).
+- **Efeknya:** Job `Auto Build & Deploy (Live)` otomatis berjalan dan berhasil (`4m 31s`), menghasilkan `app-release.apk` dan mengunggah artifact rilis yang siap diuji.
 
 ![CI/CD Passed 207 UT Hijau dan Auto Build & Deploy Sukses](screenshots/02_ci_cd_passed_207_ut_auto_build.png)
