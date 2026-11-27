@@ -14,10 +14,10 @@
 | Minimal 10 issues di GitHub/JIRA (min. 5 bug found + fitur) | **Selesai** | [GitHub Issues #1–#10](https://github.com/MyNggiz/TitipJalur/issues?q=is%3Aissue) (`#1`–`#5` Bug Closed, `#6`–`#10` Fitur) |
 | Branch `v1.0` sebagai Release OK | **Selesai** | Branch `v1.0` di commit `8d8c81c` (`1.0.0+1`) |
 | Branch `v1.0_dev` fokus perbaikan bug tertentu | **Selesai** | Branch `v1.0_dev` (commit `8a3e4b9` Red → `1598c2f` Green) |
-| Menjalankan 200+ Unit Test (passed/failed) | **Selesai** | **207/207** unit & widget test lulus (`flutter test`) |
+| Menjalankan 200+ Unit Test (passed/failed) | **Selesai** | **209/209** unit & widget test lulus (`flutter test`) |
 | Efek Unit Test Failed + Screenshot | **Selesai** | [Run #45826310244](https://github.com/MyNggiz/TitipJalur/actions/runs/45826310244) & [Screenshot Red](screenshots/01_ci_cd_failed_ut_blocked_deploy.png) |
 | All Passed Hijau → Auto Build → Deploy → Live + Screenshot | **Selesai** | [Run #45827630262](https://github.com/MyNggiz/TitipJalur/actions/runs/45827630262) & [Screenshot Green](screenshots/02_ci_cd_passed_207_ut_auto_build.png) |
-| Branch `V1.1` | **Selesai** | Branch `V1.1` (`version: 1.1.0+2`) |
+| Branch `V1.1` & Live Release | **Selesai** | Branch `V1.1` (`version: 1.1.0+2`) & [GitHub Release V1.1](https://github.com/MyNggiz/TitipJalur/releases) |
 
 ---
 
@@ -104,3 +104,25 @@ Pipeline CI/CD (`.github/workflows/ci_cd.yml`) memiliki dua job berurutan:
 - **Efeknya:** Job `Auto Build & Deploy (Live)` otomatis berjalan dan berhasil (`4m 31s`), menghasilkan `app-release.apk` dan mengunggah artifact rilis yang siap diuji.
 
 ![CI/CD Passed 207 UT Hijau dan Auto Build & Deploy Sukses](screenshots/02_ci_cd_passed_207_ut_auto_build.png)
+
+---
+
+## 5. Bukti Screenshot Lengkap P11 (Issues, Branches, Release Live & UI)
+
+### A. 10 GitHub Issues (5 Bug Found Closed + 5 Fitur)
+![10 GitHub Issues TitipJalur](screenshots/03_github_issues_10_items.png)
+
+### B. Branch Git (`v1.0`, `v1.0_dev`, `V1.1`)
+![Daftar Branch GitHub TitipJalur](screenshots/04_github_branches_v1_v1dev_v11.png)
+
+### C. GitHub Release `V1.1` Live (`app-release.apk`)
+![GitHub Release V1.1 Live](screenshots/05_github_release_v11_live.png)
+
+### D. Verifikasi UI Aplikasi Setelah Bug Fixing (`#4` & `#5`)
+- **Tab Permintaan Saya (Bug #4 Fixed):** Hanya menampilkan pesanan milik user aktif (`Budi`), pesanan milik orang lain (`Siti`, `Naufal`) tidak lagi muncul.
+
+![UI Tab Permintaan Saya Bug #4 Fixed](screenshots/06_ui_permintaan_saya_fixed.png)
+
+- **Tab Tugas Belanja / Antar (Bug #5 Fixed):** Hanya menampilkan tugas yang sudah diklaim oleh runner aktif (`Budi`), order `open` milik orang lain tidak lagi muncul.
+
+![UI Tab Tugas Belanja Runner Bug #5 Fixed](screenshots/07_ui_tugas_runner_fixed.png)
